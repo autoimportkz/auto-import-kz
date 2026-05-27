@@ -59,6 +59,9 @@
     });
   });
 
+  var WEBHOOK_URL =
+    "https://script.google.com/macros/s/AKfycbwkDxNCLCagHmeVBINmFkhO6sWy-2W83dd1bPbyK8872k0qkkN0CNBF8aSh42X4q8rUEg/exec";
+
   if (leadForm) {
     leadForm.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -68,8 +71,43 @@
         return;
       }
 
-      alert("Заявка сохранена. Напишите нам в Telegram или WhatsApp.");
-      leadForm.reset();
+      var data = new FormData(leadForm);
+      var payload = {
+        name: String(data.get("name") || "").trim(),
+        phone: String(data.get("phone") || "").trim(),
+        budget: String(data.get("budget") || "").trim(),
+        car: String(data.get("car") || "").trim(),
+        comment: String(data.get("comment") || "").trim()
+      };
+
+      var submitBtn = leadForm.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
+
+      fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Webhook request failed");
+          }
+          return response.text();
+        })
+        .then(function () {
+          alert("Заявка отправлена! Мы скоро свяжемся с вами.");
+          leadForm.reset();
+        })
+        .catch(function () {
+          alert("Ошибка отправки. Напишите нам в Telegram.");
+        })
+        .finally(function () {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+          }
+        });
     });
   }
 })();
