@@ -60,17 +60,42 @@
   });
 
   /* Lead form submit */
-  if (mainLeadForm) {
-    mainLeadForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      if (!mainLeadForm.checkValidity()) {
-        mainLeadForm.reportValidity();
-        return;
-      }
-
-      alert("Заявка сохранена. Скоро мы с вами свяжемся.");
-      mainLeadForm.reset();
+  if mainLeadForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    
+    if (!mainLeadForm.checkValidity()) {
+    mainLeadForm.reportValidity();
+    return;
+    }
+    
+    const formData = {
+    name: mainLeadForm.querySelector('[name="name"]').value,
+    phone: mainLeadForm.querySelector('[name="phone"]').value,
+    budget: mainLeadForm.querySelector('[name="budget"]').value,
+    car: mainLeadForm.querySelector('[name="car"]').value,
+    comment: mainLeadForm.querySelector('[name="comment"]').value
+    };
+    
+    try {
+    await fetch("https://script.google.com/macros/s/AKfycbwkDxNCLCagHmeVBINmFkhO6sWy-2W83dd1bPbyK8872k0qkkN0CNBF8aSh42X4q8rUEg/exec", {
+    method: "POST",
+    headers: {
+    "Content-Type": "application/json"
+    },
+    body: JSON.stringify(formData)
+    });
+    
+    ```
+    alert("Заявка отправлена! Скоро мы с вами свяжемся.");
+    mainLeadForm.reset();
+    ```
+    
+    } catch (error) {
+    alert("Ошибка отправки заявки");
+    console.error(error);
+    }
+    });
+    ;
     });
   }
 
