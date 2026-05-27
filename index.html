@@ -7,242 +7,165 @@
   <title>Auto-import-KZ | Авто из США</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="bg-layer" aria-hidden="true">
-    <div class="bg-image"></div>
-    <div class="bg-overlay"></div>
+  <div class="page-bg" aria-hidden="true">
+    <div class="page-bg__car"></div>
+    <div class="page-bg__shade"></div>
   </div>
 
-  <header class="header fade-in">
-    <a href="#" class="logo">Auto-import<span class="logo-accent">KZ</span></a>
-    <nav class="nav">
+  <header class="site-header" id="site-header">
+    <a href="#hero" class="site-header__logo">Auto-import<span>KZ</span></a>
+    <nav class="site-header__nav" aria-label="Навигация">
       <a href="#features">Услуги</a>
+      <a href="#usa">Авто из США</a>
       <a href="#lead">Заявка</a>
-      <a href="#why-us">Преимущества</a>
+      <a href="#contacts">Контакты</a>
     </nav>
-    <button class="btn btn--sm btn--outline header-cta" data-scroll="#lead">Связаться</button>
-    <button class="burger" aria-label="Меню" aria-expanded="false">
+    <a href="#lead" class="btn btn--outline site-header__cta">Связаться</a>
+    <button class="site-header__burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav-mobile">
       <span></span>
       <span></span>
       <span></span>
     </button>
   </header>
 
-  <div class="mobile-menu" aria-hidden="true">
-    <nav>
+  <aside class="site-nav-mobile" id="site-nav-mobile" aria-hidden="true">
+    <nav aria-label="Мобильное меню">
       <a href="#features">Услуги</a>
-      <a href="#why-us">Преимущества</a>
+      <a href="#usa">Авто из США</a>
       <a href="#lead">Заявка</a>
-      <button class="btn btn--primary" data-scroll="#lead">Связаться</button>
+      <a href="#contacts">Контакты</a>
+      <a href="#lead" class="btn btn--primary">Связаться</a>
     </nav>
-  </div>
+  </aside>
 
   <main>
     <section class="hero" id="hero">
-      <div class="hero__content fade-in">
-        <p class="hero__badge">Премиальный импорт · США → Казахстан</p>
-        <h1 class="hero__title">Auto-import<span class="hero__accent">KZ</span></h1>
+      <div class="hero__content">
+        <h1 class="hero__title">Auto-import<span>KZ</span></h1>
         <p class="hero__subtitle">Подбор и доставка авто из США</p>
-        <p class="hero__desc">Полный цикл: поиск, проверка, аукцион, логистика и растаможка — прозрачно и под ключ.</p>
         <div class="hero__actions">
-          <button class="btn btn--primary btn--glow" data-scroll="#lead">Оставить заявку</button>
-          <a href="#features" class="btn btn--ghost">Узнать больше</a>
-        </div>
-      </div>
-      <div class="hero__stats fade-in fade-in--delay">
-        <div class="stat glass">
-          <span class="stat__value">500+</span>
-          <span class="stat__label">авто доставлено</span>
-        </div>
-        <div class="stat glass">
-          <span class="stat__value">12</span>
-          <span class="stat__label">лет опыта</span>
-        </div>
-        <div class="stat glass">
-          <span class="stat__value">24/7</span>
-          <span class="stat__label">поддержка</span>
+          <a href="#lead" class="btn btn--primary">Оставить заявку</a>
+          <a href="#features" class="btn btn--secondary">Узнать больше</a>
         </div>
       </div>
     </section>
 
-    <section class="features" id="features">
-      <div class="section-header fade-in-on-scroll">
-        <span class="section-tag">Услуги</span>
-        <h2 class="section-title">Всё для вашего <span class="text-accent">идеального авто</span></h2>
-      </div>
-      <div class="features__grid">
-        <article class="card glass fade-in-on-scroll">
-          <div class="card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M3 13h2l1-4h12l1.5 4H21M5 17h14M7 17a2 2 0 1 0 0 .01M17 17a2 2 0 1 0 0 .01M5 11l2-5h10l2 5"/>
-            </svg>
-          </div>
-          <h3 class="card__title">Авто из США</h3>
-          <p class="card__text">Подбор лучших лотов с аукционов Copart, IAAI и Manheim</p>
-        </article>
-        <article class="card glass fade-in-on-scroll">
-          <div class="card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-              <circle cx="12" cy="12" r="4"/>
-            </svg>
-          </div>
-          <h3 class="card__title">Под ключ</h3>
-          <p class="card__text">От заявки до ключей в руках: доставка, таможня, сертификация и постановка на учёт.</p>
-        </article>
-        <article class="card glass fade-in-on-scroll">
-          <div class="card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M9 12l2 2 4-4M12 3l7 4v5c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V7l7-4z"/>
-            </svg>
-          </div>
-          <h3 class="card__title">Проверка авто</h3>
-          <p class="card__text">Carfax, инспекция, фото и видеоотчёты. Только честная история и прозрачная сделка.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="lead" id="lead">
-      <div class="lead__glow" aria-hidden="true"></div>
-      <div class="lead__inner glass fade-in-on-scroll">
-        <div class="lead__layout">
-          <div class="lead__intro">
-            <span class="section-tag">Заявка</span>
-            <h2 class="section-title">Оставьте заявку на <span class="text-accent">подбор авто</span></h2>
-            <p class="lead__text">Заполните форму — менеджер свяжется с вами, уточнит бюджет и подберёт лучшие варианты с аукционов США.</p>
-            
-          </div>
-
-          <form class="lead__form" id="main-lead-form">
-            <div class="lead__form-grid">
-              <label class="lead__field">
-                <span class="lead__label">Имя</span>
-                <input type="text" name="name" placeholder="Ваше имя" required autocomplete="name">
-              </label>
-              <label class="lead__field">
-                <span class="lead__label">Телефон</span>
-                <input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required autocomplete="tel">
-              </label>
-              <label class="lead__field">
-                <span class="lead__label">Бюджет</span>
-                <input type="text" name="budget" placeholder="Например: до $25 000" required>
-              </label>
-              <label class="lead__field">
-                <span class="lead__label">Какой автомобиль интересует</span>
-                <input type="text" name="car" placeholder="Марка, модель, год" required>
-              </label>
-              <label class="lead__field lead__field--full">
-                <span class="lead__label">Комментарий</span>
-                <textarea name="comment" rows="4" placeholder="Пожелания, комплектация, сроки…"></textarea>
-              </label>
+    <section class="block block--features" id="features">
+      <div class="wrap">
+        <h2 class="block__title">Наши преимущества</h2>
+        <div class="features-grid">
+          <article class="glass-card">
+            <div class="glass-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13h2l1-4h12l1.5 4H21M5 17h14M7 17a2 2 0 1 0 0 .01M17 17a2 2 0 1 0 0 .01M5 11l2-5h10l2 5"/></svg>
             </div>
-            <button type="submit" class="btn btn--primary btn--glow btn--full lead__submit">Отправить заявку</button>
+            <h3 class="glass-card__heading">Авто из США</h3>
+            <p class="glass-card__text">Прямой доступ к аукционам Copart, IAAI и Manheim.</p>
+          </article>
+          <article class="glass-card">
+            <div class="glass-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>
+            </div>
+            <h3 class="glass-card__heading">Под ключ</h3>
+            <p class="glass-card__text">Доставка, растаможка и постановка на учёт без лишних хлопот.</p>
+          </article>
+          <article class="glass-card">
+            <div class="glass-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4M12 3l7 4v5c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V7l7-4z"/></svg>
+            </div>
+            <h3 class="glass-card__heading">Проверка авто</h3>
+            <p class="glass-card__text">Carfax, инспекция и отчёты перед покупкой лота.</p>
+          </article>
+          <article class="glass-card">
+            <div class="glass-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <h3 class="glass-card__heading">Поддержка 24/7</h3>
+            <p class="glass-card__text">Менеджер на связи на каждом этапе сделки.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block block--usa" id="usa">
+      <div class="wrap">
+        <article class="glass-panel glass-panel--center">
+          <p class="glass-panel__eyebrow">Авто из США</p>
+          <p class="glass-panel__lead">Подбор лучших лотов с аукционов Copart, IAAI и Manheim</p>
+          <a href="#lead" class="btn btn--primary">Оставить заявку</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="block block--lead" id="lead">
+      <div class="wrap">
+        <article class="glass-panel">
+          <h2 class="glass-panel__title">Оставьте заявку на подбор авто</h2>
+          <form class="lead-form" id="lead-form">
+            <label class="lead-form__field">
+              <span class="lead-form__label">Имя</span>
+              <input type="text" name="name" autocomplete="name" required placeholder="Ваше имя">
+            </label>
+            <label class="lead-form__field">
+              <span class="lead-form__label">Телефон</span>
+              <input type="tel" name="phone" autocomplete="tel" required placeholder="+7 (___) ___-__-__">
+            </label>
+            <label class="lead-form__field">
+              <span class="lead-form__label">Бюджет</span>
+              <input type="text" name="budget" required placeholder="Например: до $25 000">
+            </label>
+            <label class="lead-form__field">
+              <span class="lead-form__label">Какой автомобиль интересует</span>
+              <input type="text" name="car" required placeholder="Марка, модель, год">
+            </label>
+            <label class="lead-form__field lead-form__field--full">
+              <span class="lead-form__label">Комментарий</span>
+              <textarea name="comment" rows="4" placeholder="Пожелания, комплектация, сроки…"></textarea>
+            </label>
+            <button type="submit" class="btn btn--primary btn--block">Отправить заявку</button>
           </form>
-        </div>
-
-        <div class="lead__divider" aria-hidden="true"></div>
-
-        <div class="lead__channels">
-          <p class="lead__channels-title">Или напишите нам напрямую</p>
-          <div class="lead__social">
-            <a href="https://t.me/auto_importKZ" class="social-btn social-btn--telegram" target="_blank" rel="noopener noreferrer">
-              <span class="social-btn__glow" aria-hidden="true"></span>
-              <span class="social-btn__icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.086-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                </svg>
-              </span>
-              <span class="social-btn__label">Telegram</span>
-              <span class="social-btn__hint">@auto_importKZ</span>
-            </a>
-
-            <a href="https://wa.me/77009904003" class="social-btn social-btn--whatsapp" target="_blank" rel="noopener noreferrer">
-              <span class="social-btn__glow" aria-hidden="true"></span>
-              <span class="social-btn__icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
-                </svg>
-              </span>
-              <span class="social-btn__label">WhatsApp</span>
-              <span class="social-btn__hint">+7 700 990-40-03</span>
-            </a>
-
-            <a href="https://www.instagram.com/auto_import_kz?igsh=MXE0cXZmMHZ5emtpbg%3D%3D&utm_source=qr" class="social-btn social-btn--instagram" target="_blank" rel="noopener noreferrer">
-              <span class="social-btn__glow" aria-hidden="true"></span>
-              <span class="social-btn__icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-                </svg>
-              </span>
-              <span class="social-btn__label">Instagram</span>
-              <span class="social-btn__hint">@auto_import_kz</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="why-us" id="why-us">
-      <div class="why-us__glow" aria-hidden="true"></div>
-      <div class="section-header fade-in-on-scroll">
-        <span class="section-tag">Почему выбирают нас</span>
-        <h2 class="section-title">Премиальный сервис <span class="text-accent">без компромиссов</span></h2>
-        <p class="why-us__lead">Мы объединяем опыт американского рынка, прозрачную логистику и персональный подход — чтобы вы получили авто мечты без рисков.</p>
-      </div>
-      <div class="why-us__grid">
-        <article class="why-card glass fade-in-on-scroll">
-          <span class="why-card__num">01</span>
-          <div class="why-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-          </div>
-          <h3 class="why-card__title">Прозрачная смета</h3>
-          <p class="why-card__text">Фиксированные этапы оплаты: аукцион, доставка, таможня. Никаких скрытых комиссий — только честный расчёт до сделки.</p>
-        </article>
-        <article class="why-card glass fade-in-on-scroll">
-          <span class="why-card__num">02</span>
-          <div class="why-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
-            </svg>
-          </div>
-          <h3 class="why-card__title">Персональный менеджер</h3>
-          <p class="why-card__text">Один специалист ведёт проект от подбора до выдачи ключей — всегда на связи в Telegram или WhatsApp.</p>
-        </article>
-        <article class="why-card glass fade-in-on-scroll">
-          <span class="why-card__num">03</span>
-          <div class="why-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-          </div>
-          <h3 class="why-card__title">Сроки под контролем</h3>
-          <p class="why-card__text">Отслеживание на каждом этапе: порт США, транзит, таможня Казахстана. Вы всегда знаете, где ваш автомобиль.</p>
-        </article>
-        <article class="why-card glass fade-in-on-scroll">
-          <span class="why-card__num">04</span>
-          <div class="why-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              <path d="M9 12l2 2 4-4"/>
-            </svg>
-          </div>
-          <h3 class="why-card__title">Гарантия качества</h3>
-          <p class="why-card__text">Только проверенные лоты с Carfax, официальные документы и юридически чистая сделка на каждом этапе.</p>
         </article>
       </div>
     </section>
 
+    <section class="block block--contacts" id="contacts">
+      <div class="wrap">
+        <h2 class="block__title">Контакты</h2>
+        <div class="contacts-grid">
+          <a href="https://t.me/auto_importKZ" class="contact-card glass-card" target="_blank" rel="noopener noreferrer">
+            <span class="contact-card__icon contact-card__icon--tg" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.086-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            </span>
+            <span class="contact-card__name">Telegram</span>
+            <span class="contact-card__meta">@auto_importKZ</span>
+          </a>
+          <a href="https://wa.me/77009904003" class="contact-card glass-card" target="_blank" rel="noopener noreferrer">
+            <span class="contact-card__icon contact-card__icon--wa" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            </span>
+            <span class="contact-card__name">WhatsApp</span>
+            <span class="contact-card__meta">+7 700 990-40-03</span>
+          </a>
+          <a href="https://www.instagram.com/auto_import_kz?igsh=MXE0cXZmMHZ5emtpbg%3D%3D&utm_source=qr" class="contact-card glass-card" target="_blank" rel="noopener noreferrer">
+            <span class="contact-card__icon contact-card__icon--ig" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            </span>
+            <span class="contact-card__name">Instagram</span>
+            <span class="contact-card__meta">@auto_import_kz</span>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer class="footer">
-    <p class="footer__copy">&copy; 2026 Auto-import-KZ. Все права защищены.</p>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; 2026 Auto-import-KZ. Все права защищены.</p>
+    </div>
   </footer>
 
   <script src="script.js"></script>
