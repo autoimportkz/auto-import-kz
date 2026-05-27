@@ -87,15 +87,9 @@
 
       fetch(WEBHOOK_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        mode: "no-cors",
         body: JSON.stringify(payload)
       })
-        .then(function (response) {
-          if (!response.ok) {
-            throw new Error("Webhook request failed");
-          }
-          return response.text();
-        })
         .then(function () {
           alert("Заявка отправлена! Мы скоро свяжемся с вами.");
           leadForm.reset();
