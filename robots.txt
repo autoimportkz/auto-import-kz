@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://movixstudio-kz.github.io/auto-import-kz/sitemap.xml
