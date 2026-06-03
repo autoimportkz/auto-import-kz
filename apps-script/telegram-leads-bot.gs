@@ -12,6 +12,13 @@ function doPost(e) {
     }
 
     if (payload.message || payload.callback_query) {
+      if (payload.update_id && isDuplicateUpdate(payload.update_id)) {
+        return jsonResponse({
+          ok: true,
+          duplicate: true
+        });
+      }
+
       handleTelegramUpdate(botToken, chatId, payload);
     } else {
       sendLeadToTelegram(botToken, chatId, payload);
@@ -55,6 +62,11 @@ function handleTelegramUpdate(botToken, managerChatId, update) {
 
   if (looksLikePhone(text)) {
     handleClientTextPhone(botToken, managerChatId, message, text);
+    return;
+  }
+
+  if (String(chatId) === String(managerChatId)) {
+    sendClientMenu(botToken, chatId);
     return;
   }
 
@@ -115,7 +127,9 @@ function handleCallback(botToken, managerChatId, query) {
       "Оставьте телефон кнопкой ниже или напишите номер сообщением.",
       "Менеджер свяжется с вами и доведёт до точного расчёта."
     ].join("\n"), requestContactKeyboard());
-    notifyManagerFromClient(botToken, managerChatId, query.message, "Клиент запросил менеджера");
+    if (String(chatId) !== String(managerChatId)) {
+      notifyManagerFromClient(botToken, managerChatId, query.message, "Клиент запросил менеджера");
+    }
     return;
   }
 
@@ -133,6 +147,7 @@ function sendClientMenu(botToken, chatId) {
 
 function handleClientContact(botToken, managerChatId, message, contact) {
   var chatId = message.chat.id;
+  var isManagerTest = String(chatId) === String(managerChatId);
   var lead = {
     name: contact.first_name || message.chat.first_name || "",
     phone: contact.phone_number,
@@ -145,13 +160,14 @@ function handleClientContact(botToken, managerChatId, message, contact) {
 
   sendLeadToTelegram(botToken, managerChatId, lead);
   sendTelegramMessage(botToken, chatId, [
-    "Спасибо! Контакт получили.",
-    "Менеджер свяжется с вами и подготовит точный расчёт."
+    isManagerTest ? "Тестовый контакт обработан." : "Спасибо! Контакт получили.",
+    isManagerTest ? "Самоуведомления для менеджера ограничены." : "Менеджер свяжется с вами и подготовит точный расчёт."
   ].join("\n"), clientMenuKeyboard());
 }
 
 function handleClientTextPhone(botToken, managerChatId, message, phoneText) {
   var chatId = message.chat.id;
+  var isManagerTest = String(chatId) === String(managerChatId);
   var lead = {
     name: message.chat.first_name || "",
     phone: phoneText,
@@ -164,8 +180,8 @@ function handleClientTextPhone(botToken, managerChatId, message, phoneText) {
 
   sendLeadToTelegram(botToken, managerChatId, lead);
   sendTelegramMessage(botToken, chatId, [
-    "Номер получили.",
-    "Менеджер скоро напишет вам в WhatsApp или позвонит."
+    isManagerTest ? "Тестовый номер обработан." : "Номер получили.",
+    isManagerTest ? "Самоуведомления для менеджера ограничены." : "Менеджер скоро напишет вам в WhatsApp или позвонит."
   ].join("\n"), clientMenuKeyboard());
 }
 
@@ -297,6 +313,16 @@ function normalizePhone(phone) {
 
 function looksLikePhone(value) {
   return normalizePhone(value).length >= 10;
+}
+
+function isDuplicateUpdate(updateId) {
+  var cache = CacheService.getScriptCache();
+  var key = "tg_update_" + updateId;
+
+  if (cache.get(key)) return true;
+
+  cache.put(key, "1", 600);
+  return false;
 }
 
 function clientMenuKeyboard() {

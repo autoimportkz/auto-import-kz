@@ -6,6 +6,7 @@ const SITE_URL = "https://movixstudio-kz.github.io/auto-import-kz/";
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents || "{}");
+    if (data.update_id && isDuplicateUpdate(data.update_id)) return out({ ok: true, duplicate: true });
     if (data.message || data.callback_query) {
       handleTelegram(data);
     } else {
@@ -27,6 +28,7 @@ function handleTelegram(update) {
   if (msg.contact && msg.contact.phone_number) return clientLead(msg, msg.contact.phone_number, "Клиент отправил контакт");
   if (text === "/start" || text === "/menu" || !text) return sendMenu(chatId);
   if (phone(text)) return clientLead(msg, text, "Клиент написал номер");
+  if (String(chatId) === String(MANAGER_CHAT_ID)) return sendMenu(chatId);
   notifyManager("Сообщение клиента", msg);
   sendMsg(chatId, "Спасибо, принял сообщение. Менеджер подключится и поможет с подбором.", menu());
 }
@@ -44,7 +46,7 @@ function handleButton(q) {
     return sendMsg(chatId, "<b>Сроки доставки</b>\n\nОбычно 45-90 дней. Срок зависит от штата, порта, маршрута и документов.", menu());
   }
   if (q.data === "manager") {
-    notifyManager("Клиент запросил менеджера", q.message);
+    if (String(chatId) !== String(MANAGER_CHAT_ID)) notifyManager("Клиент запросил менеджера", q.message);
     return sendMsg(chatId, "Оставьте телефон кнопкой ниже или напишите номер сообщением.", contactKeyboard());
   }
   sendMenu(chatId);
@@ -55,6 +57,7 @@ function sendMenu(chatId) {
 }
 
 function clientLead(msg, phoneNumber, comment) {
+  const isManagerTest = String(msg.chat.id) === String(MANAGER_CHAT_ID);
   sendLead({
     name: [msg.chat.first_name, msg.chat.last_name].filter(Boolean).join(" "),
     phone: phoneNumber,
@@ -64,7 +67,7 @@ function clientLead(msg, phoneNumber, comment) {
     pageUrl: "Telegram bot",
     submittedAt: new Date().toISOString()
   });
-  sendMsg(msg.chat.id, "Спасибо! Контакт получили. Менеджер скоро свяжется с вами.", menu());
+  sendMsg(msg.chat.id, isManagerTest ? "Тестовый контакт обработан." : "Спасибо! Контакт получили. Менеджер скоро свяжется с вами.", menu());
 }
 
 function sendLead(d) {
@@ -104,6 +107,14 @@ function sendMsg(chatId, text, markup) {
 
 function answer(id) {
   UrlFetchApp.fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/answerCallbackQuery", { method: "post", contentType: "application/json", muteHttpExceptions: true, payload: JSON.stringify({ callback_query_id: id }) });
+}
+
+function isDuplicateUpdate(updateId) {
+  const cache = CacheService.getScriptCache();
+  const key = "tg_update_" + updateId;
+  if (cache.get(key)) return true;
+  cache.put(key, "1", 600);
+  return false;
 }
 
 function setupTelegramWebhook() {
