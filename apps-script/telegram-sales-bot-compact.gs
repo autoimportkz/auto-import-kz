@@ -25,10 +25,13 @@ function handleTelegram(update) {
   if (!msg) return;
   const chatId = msg.chat.id;
   const text = (msg.text || "").trim();
+  if (String(chatId) === String(MANAGER_CHAT_ID)) {
+    if (text === "/start" || text === "/menu") return sendMenu(chatId);
+    return;
+  }
   if (msg.contact && msg.contact.phone_number) return clientLead(msg, msg.contact.phone_number, "Клиент отправил контакт");
   if (text === "/start" || text === "/menu" || !text) return sendMenu(chatId);
   if (phone(text)) return clientLead(msg, text, "Клиент написал номер");
-  if (String(chatId) === String(MANAGER_CHAT_ID)) return sendMenu(chatId);
   notifyManager("Сообщение клиента", msg);
   sendMsg(chatId, "Спасибо, принял сообщение. Менеджер подключится и поможет с подбором.", menu());
 }
@@ -36,6 +39,9 @@ function handleTelegram(update) {
 function handleButton(q) {
   answer(q.id);
   const chatId = q.message.chat.id;
+  if (String(chatId) === String(MANAGER_CHAT_ID)) {
+    if (q.data === "manager") return;
+  }
   if (q.data === "calc") {
     return sendMsg(chatId, "<b>Для расчёта отправьте:</b>\n\n1. Марка и модель\n2. Год\n3. Объём двигателя\n4. Цена лота или ссылка\n5. Город доставки\n\nИ оставьте телефон кнопкой ниже.", contactKeyboard());
   }
@@ -57,7 +63,6 @@ function sendMenu(chatId) {
 }
 
 function clientLead(msg, phoneNumber, comment) {
-  const isManagerTest = String(msg.chat.id) === String(MANAGER_CHAT_ID);
   sendLead({
     name: [msg.chat.first_name, msg.chat.last_name].filter(Boolean).join(" "),
     phone: phoneNumber,
@@ -67,7 +72,7 @@ function clientLead(msg, phoneNumber, comment) {
     pageUrl: "Telegram bot",
     submittedAt: new Date().toISOString()
   });
-  sendMsg(msg.chat.id, isManagerTest ? "Тестовый контакт обработан." : "Спасибо! Контакт получили. Менеджер скоро свяжется с вами.", menu());
+  sendMsg(msg.chat.id, "Спасибо! Контакт получили. Менеджер скоро свяжется с вами.", menu());
 }
 
 function sendLead(d) {
@@ -118,7 +123,7 @@ function isDuplicateUpdate(updateId) {
 }
 
 function setupTelegramWebhook() {
-  const r = UrlFetchApp.fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/setWebhook", { method: "post", contentType: "application/json", muteHttpExceptions: true, payload: JSON.stringify({ url: WEB_APP_URL, allowed_updates: ["message", "callback_query"] }) });
+  const r = UrlFetchApp.fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/setWebhook", { method: "post", contentType: "application/json", muteHttpExceptions: true, payload: JSON.stringify({ url: WEB_APP_URL, allowed_updates: ["message", "callback_query"], drop_pending_updates: true }) });
   console.log(r.getContentText());
 }
 

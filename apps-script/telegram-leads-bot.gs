@@ -50,6 +50,13 @@ function handleTelegramUpdate(botToken, managerChatId, update) {
   var text = cleanText(message.text);
   var contact = message.contact;
 
+  if (String(chatId) === String(managerChatId)) {
+    if (text === "/start" || text === "/menu") {
+      sendClientMenu(botToken, chatId);
+    }
+    return;
+  }
+
   if (contact && contact.phone_number) {
     handleClientContact(botToken, managerChatId, message, contact);
     return;
@@ -65,11 +72,6 @@ function handleTelegramUpdate(botToken, managerChatId, update) {
     return;
   }
 
-  if (String(chatId) === String(managerChatId)) {
-    sendClientMenu(botToken, chatId);
-    return;
-  }
-
   notifyManagerFromClient(botToken, managerChatId, message, "Сообщение клиента");
   sendTelegramMessage(botToken, chatId, [
     "Спасибо, принял сообщение.",
@@ -82,6 +84,8 @@ function handleCallback(botToken, managerChatId, query) {
   var data = cleanText(query.data);
 
   answerCallbackQuery(botToken, query.id);
+
+  if (String(chatId) === String(managerChatId) && data === "manager") return;
 
   if (data === "calc") {
     sendTelegramMessage(botToken, chatId, [
@@ -395,7 +399,8 @@ function setupTelegramWebhook() {
     muteHttpExceptions: true,
     payload: JSON.stringify({
       url: webAppUrl,
-      allowed_updates: ["message", "callback_query"]
+      allowed_updates: ["message", "callback_query"],
+      drop_pending_updates: true
     })
   });
 
