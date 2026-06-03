@@ -107,11 +107,23 @@ function contactKeyboard() {
 function sendMsg(chatId, text, markup) {
   const payload = { chat_id: chatId, text: text, parse_mode: "HTML", disable_web_page_preview: true };
   if (markup) payload.reply_markup = markup;
-  UrlFetchApp.fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", { method: "post", contentType: "application/json", muteHttpExceptions: true, payload: JSON.stringify(payload) });
+  const response = UrlFetchApp.fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", { method: "post", contentType: "application/json", muteHttpExceptions: true, payload: JSON.stringify(payload) });
+  assertTelegramOk(response);
 }
 
 function answer(id) {
   UrlFetchApp.fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/answerCallbackQuery", { method: "post", contentType: "application/json", muteHttpExceptions: true, payload: JSON.stringify({ callback_query_id: id }) });
+}
+
+function assertTelegramOk(response) {
+  const body = response.getContentText();
+  let data = {};
+  try {
+    data = JSON.parse(body);
+  } catch (err) {
+    throw new Error("Telegram returned invalid JSON: " + body);
+  }
+  if (!data.ok) throw new Error("Telegram sendMessage failed: " + body);
 }
 
 function isDuplicateUpdate(updateId) {

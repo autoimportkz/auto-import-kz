@@ -124,29 +124,45 @@
           <article class="glass-panel calculator-copy">
             <p class="glass-panel__eyebrow">Калькулятор</p>
             <h2 class="glass-panel__title">Предварительный расчёт авто из США</h2>
-            <p class="glass-panel__lead">Введите цену лота, доставку и характеристики авто. Калькулятор посчитает ориентир с таможенной сеткой, утильсбором и первичной регистрацией в Казахстане.</p>
+            <p class="glass-panel__lead">Быстро оцените бюджет до Казахстана. Для клиента достаточно цены лота, года, объёма и типа двигателя — остальные расходы уже заложены по умолчанию.</p>
             <p class="calculator-note">Расчёт справочный для легковых авто М1 и физлиц. Если таможенная оценка по марке и модели выше цены покупки, укажите её отдельно — калькулятор возьмёт большую базу.</p>
+            <div class="trust-list" aria-label="Гарантии и проверки">
+              <span>Работаем с Copart</span>
+              <span>Работаем с IAAI</span>
+              <span>Проверка Carfax</span>
+              <span>Фото до покупки</span>
+              <span>Отчёт по повреждениям</span>
+            </div>
           </article>
 
           <article class="glass-panel calculator" aria-label="Калькулятор стоимости авто из США">
+            <div class="calculator-result" aria-live="polite">
+              <span class="calculator-result__label">Стоимость в Казахстане</span>
+              <strong id="calculator-total-kzt">0 ₸</strong>
+              <span id="calculator-total-usd">$0</span>
+            </div>
+            <div class="calculator-tabs" role="tablist" aria-label="Режим расчёта">
+              <button class="calculator-tab is-active" type="button" data-calc-mode="quick">Быстрый расчёт</button>
+              <button class="calculator-tab" type="button" data-calc-mode="detail">Детальный расчёт</button>
+            </div>
             <form class="calculator-form" id="cost-calculator">
               <label class="lead-form__field">
                 <span class="lead-form__label">Цена лота, $</span>
                 <input type="number" name="lot" min="0" step="100" value="12000" inputmode="decimal">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Марка</span>
                 <input type="text" name="make" placeholder="Например: Toyota">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Модель</span>
                 <input type="text" name="model" placeholder="Например: Camry">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Оценка таможни, $</span>
                 <input type="number" name="customsAssessment" min="0" step="100" value="0" inputmode="decimal">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Аукцион</span>
                 <select name="auctionType">
                   <option value="copart">Copart</option>
@@ -154,35 +170,35 @@
                   <option value="manual">Ввести вручную</option>
                 </select>
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Сбор вручную, $</span>
                 <input type="number" name="auctionManual" min="0" step="50" value="0" inputmode="decimal">
               </label>
-              <div class="calculator-auto-fee lead-form__field--full" aria-live="polite">
+              <div class="calculator-auto-fee lead-form__field--full" aria-live="polite" data-detail-field>
                 <span>Аукционный сбор подставится автоматически после цены лота:</span>
                 <strong id="auction-fee-usd">$0</strong>
               </div>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Доставка по США, $</span>
                 <input type="number" name="inland" min="0" step="50" value="650" inputmode="decimal">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Морская доставка, $</span>
                 <input type="number" name="ocean" min="0" step="50" value="1800" inputmode="decimal">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Ремонт, если нужен, $</span>
                 <input type="number" name="repair" min="0" step="100" value="0" inputmode="decimal">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Документы в Грузии, $</span>
                 <input type="number" name="georgiaDocs" min="0" step="50" value="350" inputmode="decimal">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Доставка в Казахстан, $</span>
                 <input type="number" name="kazakhstanTransport" min="0" step="50" value="1200" inputmode="decimal">
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Оформление в РК, $</span>
                 <input type="number" name="kzDocs" min="0" step="50" value="600" inputmode="decimal">
               </label>
@@ -202,45 +218,66 @@
                   <option value="electric">Электро</option>
                 </select>
               </label>
-              <label class="lead-form__field">
+              <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Услуги компании, $</span>
                 <input type="number" name="service" min="0" step="50" value="1000" inputmode="decimal">
               </label>
-              <label class="lead-form__field lead-form__field--full">
+              <label class="lead-form__field lead-form__field--full" data-detail-field>
                 <span class="lead-form__label">Курс $ к ₸</span>
                 <input type="number" name="usdRate" min="1" step="1" value="485" inputmode="decimal">
               </label>
-              <label class="lead-form__field lead-form__field--full">
+              <label class="lead-form__field lead-form__field--full" data-detail-field>
                 <span class="lead-form__label">Курс € к ₸ для таможенной сетки</span>
                 <input type="number" name="eurRate" min="1" step="1" value="525" inputmode="decimal">
               </label>
-              <label class="lead-form__field lead-form__field--full">
+              <label class="lead-form__field lead-form__field--full" data-detail-field>
                 <span class="lead-form__label">Пошлина вручную, ₸</span>
                 <input type="number" name="dutyManualKzt" min="0" step="1000" value="0" inputmode="numeric">
               </label>
 
-              <div class="calculator-result lead-form__field--full" aria-live="polite">
-                <span class="calculator-result__label">Итоговая ориентировочная стоимость</span>
-                <strong id="calculator-total-kzt">0 ₸</strong>
-                <span id="calculator-total-usd">$0</span>
-              </div>
-
               <div class="calculator-breakdown lead-form__field--full">
-                <div><span>Цена лота + доставка + услуги</span><strong data-calc="base">0 ₸</strong></div>
-                <div><span>Аукционный сбор</span><strong data-calc="auction">0 ₸</strong></div>
-                <div><span>Ремонт</span><strong data-calc="repair">0 ₸</strong></div>
-                <div><span>Документы в Грузии</span><strong data-calc="georgiaDocs">0 ₸</strong></div>
-                <div><span>Доставка в Казахстан</span><strong data-calc="kazakhstanTransport">0 ₸</strong></div>
-                <div><span>Таможенный сбор</span><strong data-calc="customsFee">0 ₸</strong></div>
-                <div><span>Пошлина по сетке / вручную</span><strong data-calc="duty">0 ₸</strong></div>
+                <div><span>Цена лота</span><strong data-calc="lot">0 ₸</strong></div>
+                <div><span>Доставка и услуги</span><strong data-calc="delivery">0 ₸</strong></div>
+                <div><span>Таможня</span><strong data-calc="customs">0 ₸</strong></div>
                 <div><span>Утильсбор</span><strong data-calc="recycling">0 ₸</strong></div>
-                <div><span>Оформление в РК: СБКТС, ЭПТС, первичка, номера</span><strong data-calc="kzRegistration">0 ₸</strong></div>
+                <div><span>Первичная регистрация и оформление</span><strong data-calc="kzRegistration">0 ₸</strong></div>
               </div>
 
               <a href="#lead" class="btn btn--primary btn--block">Получить точный расчёт</a>
             </form>
           </article>
         </div>
+
+        <article class="glass-panel finder-panel" id="finder">
+          <div>
+            <p class="glass-panel__eyebrow">Подбор</p>
+            <h2 class="glass-panel__title">Найти авто под мой бюджет</h2>
+          </div>
+          <form class="finder-form" id="finder-form">
+            <label class="lead-form__field">
+              <span class="lead-form__label">Бюджет, ₸</span>
+              <input type="number" name="budgetKzt" min="0" step="100000" value="8000000" inputmode="numeric" required>
+            </label>
+            <label class="lead-form__field">
+              <span class="lead-form__label">Кузов</span>
+              <select name="bodyType">
+                <option value="Кроссовер">Кроссовер</option>
+                <option value="Седан">Седан</option>
+                <option value="Внедорожник">Внедорожник</option>
+                <option value="Минивэн">Минивэн</option>
+              </select>
+            </label>
+            <label class="lead-form__field">
+              <span class="lead-form__label">Марка</span>
+              <input type="text" name="preferredMake" placeholder="Например: Toyota">
+            </label>
+            <label class="lead-form__field">
+              <span class="lead-form__label">Телефон</span>
+              <input type="tel" name="phone" autocomplete="tel" required placeholder="+7 (___) ___-__-__">
+            </label>
+            <button type="submit" class="btn btn--primary">Подобрать авто</button>
+          </form>
+        </article>
       </div>
     </section>
 

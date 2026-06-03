@@ -6,6 +6,7 @@
   var mobileNav = document.getElementById("site-nav-mobile");
   var leadForm = document.getElementById("lead-form");
   var calculator = document.getElementById("cost-calculator");
+  var finderForm = document.getElementById("finder-form");
 
   function updateHeader() {
     if (!header) return;
@@ -287,7 +288,7 @@
   }
 
   function setCalculatorRow(name, value) {
-    var target = calculator ? calculator.querySelector('[data-calc="' + name + '"]') : null;
+    var target = document.querySelector('[data-calc="' + name + '"]');
     if (target) {
       target.textContent = formatKzt(value);
     }
@@ -327,6 +328,7 @@
     var customsBaseUsd = Math.max(lot, customsAssessment);
     var customsValueKzt = (customsBaseUsd + auction + inland + ocean) * usdRate;
     var customsValueEur = eurRate ? customsValueKzt / eurRate : 0;
+    var lotKzt = lot * usdRate;
     var baseKzt = (lot + inland + ocean + service) * usdRate;
     var auctionKzt = auction * usdRate;
     var repairKzt = repair * usdRate;
@@ -355,13 +357,9 @@
     var auctionTarget = document.getElementById("auction-fee-usd");
 
     updateManualAuctionField(auctionType);
-    setCalculatorRow("base", baseKzt);
-    setCalculatorRow("auction", auctionKzt);
-    setCalculatorRow("repair", repairKzt);
-    setCalculatorRow("georgiaDocs", georgiaDocsKzt);
-    setCalculatorRow("kazakhstanTransport", kazakhstanTransportKzt);
-    setCalculatorRow("customsFee", customsFee);
-    setCalculatorRow("duty", duty);
+    setCalculatorRow("lot", lotKzt);
+    setCalculatorRow("delivery", baseKzt - lotKzt + auctionKzt + repairKzt + georgiaDocsKzt + kazakhstanTransportKzt);
+    setCalculatorRow("customs", customsFee + duty);
     setCalculatorRow("recycling", recycling);
     setCalculatorRow("kzRegistration", kzRegistration);
 
@@ -380,11 +378,48 @@
 
   if (calculator) {
     calculator.addEventListener("input", updateCalculator);
+    calculator.classList.add("is-quick");
+    document.querySelectorAll("[data-calc-mode]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var mode = button.getAttribute("data-calc-mode") || "quick";
+        calculator.classList.toggle("is-quick", mode === "quick");
+        document.querySelectorAll("[data-calc-mode]").forEach(function (tab) {
+          tab.classList.toggle("is-active", tab === button);
+        });
+      });
+    });
     updateCalculator();
   }
 
   var WEBHOOK_URL =
     "https://script.google.com/macros/s/AKfycbws0Y9SAD9tpcSVSii3vkAbXD0N9IaqgS1naTYBMQsyu0QJsnwxl-P1jbb6YqeT7VValQ/exec";
+
+  function sendLeadPayload(form, payload, successMessage) {
+    var submitBtn = form.querySelector('button[type="submit"]');
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+    }
+
+    return fetch(WEBHOOK_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(payload)
+    })
+      .then(function () {
+        alert(successMessage);
+        form.reset();
+        if (form === calculator) updateCalculator();
+      })
+      .catch(function () {
+        alert("Ошибка отправки. Напишите нам в Telegram.");
+      })
+      .finally(function () {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+        }
+      });
+  }
 
   if (leadForm) {
     leadForm.addEventListener("submit", function (event) {
@@ -396,7 +431,8 @@
       }
 
       var data = new FormData(leadForm);
-      var payload = {
+
+      sendLeadPayload(leadForm, {
         name: String(data.get("name") || "").trim(),
         phone: String(data.get("phone") || "").trim(),
         budget: String(data.get("budget") || "").trim(),
@@ -404,30 +440,33 @@
         comment: String(data.get("comment") || "").trim(),
         pageUrl: window.location.href,
         submittedAt: new Date().toISOString()
-      };
+      }, "Заявка отправлена! Мы скоро свяжемся с вами.");
+    });
+  }
 
-      var submitBtn = leadForm.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = true;
+  if (finderForm) {
+    finderForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      if (!finderForm.checkValidity()) {
+        finderForm.reportValidity();
+        return;
       }
 
-      fetch(WEBHOOK_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify(payload)
-      })
-        .then(function () {
-          alert("Заявка отправлена! Мы скоро свяжемся с вами.");
-          leadForm.reset();
-        })
-        .catch(function () {
-          alert("Ошибка отправки. Напишите нам в Telegram.");
-        })
-        .finally(function () {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-          }
-        });
+      var data = new FormData(finderForm);
+      var budget = String(data.get("budgetKzt") || "").trim();
+      var bodyType = String(data.get("bodyType") || "").trim();
+      var preferredMake = String(data.get("preferredMake") || "").trim();
+
+      sendLeadPayload(finderForm, {
+        name: "Заявка на подбор авто",
+        phone: String(data.get("phone") || "").trim(),
+        budget: budget ? budget + " ₸" : "Не указан",
+        car: [preferredMake || "Любая марка", bodyType].filter(Boolean).join(", "),
+        comment: "Клиент нажал «Найти авто под мой бюджет». Нужно подобрать варианты и закрыть на консультацию.",
+        pageUrl: window.location.href + "#finder",
+        submittedAt: new Date().toISOString()
+      }, "Заявка на подбор отправлена! Мы скоро свяжемся с вами.");
     });
   }
 })();

@@ -275,12 +275,13 @@ function sendTelegramMessage(botToken, chatId, text, replyMarkup) {
     payload.reply_markup = replyMarkup;
   }
 
-  UrlFetchApp.fetch(TELEGRAM_API + botToken + "/sendMessage", {
+  var response = UrlFetchApp.fetch(TELEGRAM_API + botToken + "/sendMessage", {
     method: "post",
     contentType: "application/json",
     muteHttpExceptions: true,
     payload: JSON.stringify(payload)
   });
+  assertTelegramResponse(response);
 }
 
 function answerCallbackQuery(botToken, callbackQueryId) {
@@ -292,6 +293,21 @@ function answerCallbackQuery(botToken, callbackQueryId) {
       callback_query_id: callbackQueryId
     })
   });
+}
+
+function assertTelegramResponse(response) {
+  var body = response.getContentText();
+  var payload = {};
+
+  try {
+    payload = JSON.parse(body);
+  } catch (error) {
+    throw new Error("Telegram returned invalid JSON: " + body);
+  }
+
+  if (!payload.ok) {
+    throw new Error("Telegram sendMessage failed: " + body);
+  }
 }
 
 function buildWhatsappUrl(phone, lead) {
