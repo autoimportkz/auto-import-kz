@@ -155,6 +155,18 @@
                 <input type="number" name="ocean" min="0" step="50" value="1800" inputmode="decimal">
               </label>
               <label class="lead-form__field">
+                <span class="lead-form__label">Ремонт, $</span>
+                <input type="number" name="repair" min="0" step="100" value="1500" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Документы в Грузии, $</span>
+                <input type="number" name="georgiaDocs" min="0" step="50" value="350" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Доставка в Казахстан, $</span>
+                <input type="number" name="kazakhstanTransport" min="0" step="50" value="1200" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
                 <span class="lead-form__label">Год выпуска</span>
                 <input type="number" name="year" min="1990" max="2026" step="1" value="2021" inputmode="numeric">
               </label>
@@ -192,6 +204,9 @@
               <div class="calculator-breakdown lead-form__field--full">
                 <div><span>Цена лота + доставка + услуги</span><strong data-calc="base">0 ₸</strong></div>
                 <div><span>Аукционный сбор</span><strong data-calc="auction">0 ₸</strong></div>
+                <div><span>Ремонт</span><strong data-calc="repair">0 ₸</strong></div>
+                <div><span>Документы в Грузии</span><strong data-calc="georgiaDocs">0 ₸</strong></div>
+                <div><span>Доставка в Казахстан</span><strong data-calc="kazakhstanTransport">0 ₸</strong></div>
                 <div><span>Таможенный сбор</span><strong data-calc="customsFee">0 ₸</strong></div>
                 <div><span>Пошлина по сетке</span><strong data-calc="duty">0 ₸</strong></div>
                 <div><span>Утильсбор</span><strong data-calc="recycling">0 ₸</strong></div>

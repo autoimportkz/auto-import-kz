@@ -302,6 +302,9 @@
     var inland = getCalculatorValue("inland");
     var ocean = getCalculatorValue("ocean");
     var service = getCalculatorValue("service");
+    var repair = getCalculatorValue("repair");
+    var georgiaDocs = getCalculatorValue("georgiaDocs");
+    var kazakhstanTransport = getCalculatorValue("kazakhstanTransport");
     var usdRate = getCalculatorValue("usdRate");
     var eurRate = getCalculatorValue("eurRate");
     var year = Math.round(getCalculatorValue("year"));
@@ -312,17 +315,33 @@
     var customsValueKzt = (lot + auction + inland + ocean) * usdRate;
     var baseKzt = (lot + inland + ocean + service) * usdRate;
     var auctionKzt = auction * usdRate;
+    var repairKzt = repair * usdRate;
+    var georgiaDocsKzt = georgiaDocs * usdRate;
+    var kazakhstanTransportKzt = kazakhstanTransport * usdRate;
     var customsFee = 20000;
     var duty = calculateCustomsDuty(customsValueKzt, lot, engine, ageGroup, eurRate, isElectric);
     var recycling = calculateRecyclingFee(engine, isElectric);
     var primary = calculatePrimaryRegistration(ageGroup, isElectric);
     var plates = 4.05 * 4325;
-    var totalKzt = baseKzt + auctionKzt + customsFee + duty + recycling + primary + plates;
+    var totalKzt =
+      baseKzt +
+      auctionKzt +
+      repairKzt +
+      georgiaDocsKzt +
+      kazakhstanTransportKzt +
+      customsFee +
+      duty +
+      recycling +
+      primary +
+      plates;
     var usdTarget = document.getElementById("calculator-total-usd");
     var kztTarget = document.getElementById("calculator-total-kzt");
 
     setCalculatorRow("base", baseKzt);
     setCalculatorRow("auction", auctionKzt);
+    setCalculatorRow("repair", repairKzt);
+    setCalculatorRow("georgiaDocs", georgiaDocsKzt);
+    setCalculatorRow("kazakhstanTransport", kazakhstanTransportKzt);
     setCalculatorRow("customsFee", customsFee);
     setCalculatorRow("duty", duty);
     setCalculatorRow("recycling", recycling);
