@@ -214,6 +214,10 @@
                 <span class="lead-form__label">Курс € к ₸ для таможенной сетки</span>
                 <input type="number" name="eurRate" min="1" step="1" value="525" inputmode="decimal">
               </label>
+              <label class="lead-form__field lead-form__field--full">
+                <span class="lead-form__label">Пошлина вручную, ₸</span>
+                <input type="number" name="dutyManualKzt" min="0" step="1000" value="0" inputmode="numeric">
+              </label>
 
               <div class="calculator-result lead-form__field--full" aria-live="polite">
                 <span class="calculator-result__label">Итоговая ориентировочная стоимость</span>
@@ -228,7 +232,7 @@
                 <div><span>Документы в Грузии</span><strong data-calc="georgiaDocs">0 ₸</strong></div>
                 <div><span>Доставка в Казахстан</span><strong data-calc="kazakhstanTransport">0 ₸</strong></div>
                 <div><span>Таможенный сбор</span><strong data-calc="customsFee">0 ₸</strong></div>
-                <div><span>Пошлина по сетке</span><strong data-calc="duty">0 ₸</strong></div>
+                <div><span>Пошлина по сетке / вручную</span><strong data-calc="duty">0 ₸</strong></div>
                 <div><span>Утильсбор</span><strong data-calc="recycling">0 ₸</strong></div>
                 <div><span>Оформление в РК: СБКТС, ЭПТС, первичка, номера</span><strong data-calc="kzRegistration">0 ₸</strong></div>
               </div>

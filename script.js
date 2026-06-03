@@ -242,22 +242,22 @@
     return 5.7;
   }
 
-  function calculateCustomsDuty(customsValueKzt, lotUsd, engine, ageGroup, eurRate, isElectric) {
+  function calculateCustomsDuty(customsValueKzt, customsValueEur, engine, ageGroup, eurRate, isElectric) {
     if (isElectric) return 0;
 
     if (ageGroup === "under2" || ageGroup === "twoToThree") {
-      var percent = lotUsd <= 8500 ? 0.54 : 0.48;
+      var percent = customsValueEur <= 8500 ? 0.54 : 0.48;
       var minRate = 2.5;
 
-      if (lotUsd > 169000) {
+      if (customsValueEur > 169000) {
         minRate = 20;
-      } else if (lotUsd > 84500) {
+      } else if (customsValueEur > 84500) {
         minRate = 15;
-      } else if (lotUsd > 42300) {
+      } else if (customsValueEur > 42300) {
         minRate = 7.5;
-      } else if (lotUsd > 16700) {
+      } else if (customsValueEur > 16700) {
         minRate = 5.5;
-      } else if (lotUsd > 8500) {
+      } else if (customsValueEur > 8500) {
         minRate = 3.5;
       }
 
@@ -318,6 +318,7 @@
     var kzDocs = getCalculatorValue("kzDocs");
     var usdRate = getCalculatorValue("usdRate");
     var eurRate = getCalculatorValue("eurRate");
+    var dutyManualKzt = getCalculatorValue("dutyManualKzt");
     var year = Math.round(getCalculatorValue("year"));
     var engine = getCalculatorValue("engine");
     var fuel = getCalculatorText("fuel");
@@ -325,6 +326,7 @@
     var ageGroup = getVehicleAgeGroup(year);
     var customsBaseUsd = Math.max(lot, customsAssessment);
     var customsValueKzt = (customsBaseUsd + auction + inland + ocean) * usdRate;
+    var customsValueEur = eurRate ? customsValueKzt / eurRate : 0;
     var baseKzt = (lot + inland + ocean + service) * usdRate;
     var auctionKzt = auction * usdRate;
     var repairKzt = repair * usdRate;
@@ -332,7 +334,8 @@
     var kazakhstanTransportKzt = kazakhstanTransport * usdRate;
     var kzDocsKzt = kzDocs * usdRate;
     var customsFee = 20000;
-    var duty = calculateCustomsDuty(customsValueKzt, customsBaseUsd, engine, ageGroup, eurRate, isElectric);
+    var calculatedDuty = calculateCustomsDuty(customsValueKzt, customsValueEur, engine, ageGroup, eurRate, isElectric);
+    var duty = dutyManualKzt || calculatedDuty;
     var recycling = calculateRecyclingFee(engine, isElectric);
     var primary = calculatePrimaryRegistration(ageGroup, isElectric);
     var plates = 4.05 * 4325;
