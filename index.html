@@ -150,13 +150,15 @@
                 <span class="lead-form__label">Цена лота, $</span>
                 <input type="number" name="lot" min="0" step="100" value="12000" inputmode="decimal">
               </label>
-              <label class="lead-form__field" data-detail-field>
+              <label class="lead-form__field">
                 <span class="lead-form__label">Марка</span>
-                <input type="text" name="make" placeholder="Например: Toyota">
+                <input type="text" name="make" list="customs-makes" placeholder="Например: Toyota">
+                <datalist id="customs-makes"></datalist>
               </label>
-              <label class="lead-form__field" data-detail-field>
+              <label class="lead-form__field">
                 <span class="lead-form__label">Модель</span>
-                <input type="text" name="model" placeholder="Например: Camry">
+                <input type="text" name="model" list="customs-models" placeholder="Например: Camry">
+                <datalist id="customs-models"></datalist>
               </label>
               <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Оценка таможни, $</span>
@@ -177,6 +179,10 @@
               <div class="calculator-auto-fee lead-form__field--full" aria-live="polite" data-detail-field>
                 <span>Аукционный сбор подставится автоматически после цены лота:</span>
                 <strong id="auction-fee-usd">$0</strong>
+              </div>
+              <div class="calculator-auto-fee calculator-customs-value lead-form__field--full" aria-live="polite">
+                <span id="customs-value-note">Выберите марку и модель — оценка таможни подтянется из таблицы.</span>
+                <strong id="customs-value-usd">$0</strong>
               </div>
               <label class="lead-form__field" data-detail-field>
                 <span class="lead-form__label">Доставка по США, $</span>
@@ -358,6 +364,7 @@
     </div>
   </footer>
 
+  <script src="assets/customs-values.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

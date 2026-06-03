@@ -7,6 +7,9 @@
   var leadForm = document.getElementById("lead-form");
   var calculator = document.getElementById("cost-calculator");
   var finderForm = document.getElementById("finder-form");
+  var customsValues = Array.isArray(window.CUSTOMS_VALUES) ? window.CUSTOMS_VALUES : [];
+  var customsMakes = document.getElementById("customs-makes");
+  var customsModels = document.getElementById("customs-models");
 
   function updateHeader() {
     if (!header) return;
@@ -88,6 +91,127 @@
       currency: "KZT",
       maximumFractionDigits: 0
     }).format(value);
+  }
+
+  function normalizeVehicleText(value) {
+    return String(value || "")
+      .toUpperCase()
+      .replace(/Ё/g, "Е")
+      .replace(/[^0-9A-ZА-Я]+/g, "");
+  }
+
+  function uniqueSorted(values) {
+    return Array.from(new Set(values.filter(Boolean))).sort(function (a, b) {
+      return a.localeCompare(b, "ru");
+    });
+  }
+
+  function fillDatalist(target, values) {
+    if (!target) return;
+    target.innerHTML = uniqueSorted(values)
+      .map(function (value) {
+        return '<option value="' + String(value).replace(/"/g, "&quot;") + '"></option>';
+      })
+      .join("");
+  }
+
+  function getCustomsCandidates(make, model) {
+    var makeKey = normalizeVehicleText(make);
+    var modelKey = normalizeVehicleText(model);
+
+    if (!makeKey || !modelKey) return [];
+
+    return customsValues.filter(function (item) {
+      return normalizeVehicleText(item.make) === makeKey && normalizeVehicleText(item.model) === modelKey;
+    });
+  }
+
+  function chooseCustomsBaseYear(rows, year) {
+    var exact = rows.filter(function (item) {
+      return item.year === year;
+    });
+
+    if (exact.length) {
+      return {
+        rows: exact,
+        baseYear: year,
+        yearDelta: 0,
+        source: "exact"
+      };
+    }
+
+    var newerYears = Array.from(new Set(rows.map(function (item) {
+      return item.year;
+    }))).sort(function (a, b) {
+      return a - b;
+    }).filter(function (itemYear) {
+      return itemYear > year;
+    });
+    var baseYear = newerYears.length ? Number(newerYears[0]) : Math.max.apply(null, rows.map(function (item) {
+      return item.year;
+    }));
+
+    return {
+      rows: rows.filter(function (item) {
+        return item.year === baseYear;
+      }),
+      baseYear: baseYear,
+      yearDelta: Math.max(0, baseYear - year),
+      source: "depreciated"
+    };
+  }
+
+  function chooseCustomsRow(rows, engine, isElectric) {
+    if (!rows.length) return null;
+
+    if (isElectric) {
+      return rows.find(function (item) {
+        return item.electric;
+      }) || rows[0];
+    }
+
+    return rows
+      .filter(function (item) {
+        return !item.electric && Number(item.engine) > 0;
+      })
+      .sort(function (a, b) {
+        return Math.abs(a.engine - engine) - Math.abs(b.engine - engine);
+      })[0] || rows[0];
+  }
+
+  function getCustomsTableValue(make, model, year, engine, isElectric) {
+    var candidates = getCustomsCandidates(make, model);
+
+    if (!candidates.length || !year) return null;
+
+    var yearPick = chooseCustomsBaseYear(candidates, year);
+    var row = chooseCustomsRow(yearPick.rows, engine, isElectric);
+    if (!row) return null;
+
+    var value = row.value * Math.pow(0.85, yearPick.yearDelta);
+
+    return {
+      value: Math.round(value),
+      row: row,
+      baseYear: yearPick.baseYear,
+      yearDelta: yearPick.yearDelta,
+      source: yearPick.source
+    };
+  }
+
+  function updateCustomsModelOptions() {
+    if (!calculator || !customsModels) return;
+    var make = getCalculatorText("make");
+    var makeKey = normalizeVehicleText(make);
+    var models = customsValues
+      .filter(function (item) {
+        return !makeKey || normalizeVehicleText(item.make) === makeKey;
+      })
+      .map(function (item) {
+        return item.model;
+      });
+
+    fillDatalist(customsModels, models);
   }
 
   function findTierFee(value, tiers) {
@@ -219,9 +343,13 @@
   }
 
   function getVehicleAgeGroup(year) {
-    if (year >= 2025) return "under2";
-    if (year === 2024) return "twoToThree";
-    if (year >= 2021) return "threeToFive";
+    var currentYear = new Date().getFullYear();
+    var age = currentYear - year;
+
+    if (age > 7) return "overSeven";
+    if (age < 2) return "under2";
+    if (age <= 3) return "twoToThree";
+    if (age <= 5) return "threeToFive";
     return "overFive";
   }
 
@@ -245,6 +373,7 @@
 
   function calculateCustomsDuty(customsValueKzt, customsValueEur, engine, ageGroup, eurRate, isElectric) {
     if (isElectric) return 0;
+    if (ageGroup === "overSeven") return engine * 0.6 * eurRate;
 
     if (ageGroup === "under2" || ageGroup === "twoToThree") {
       var percent = customsValueEur <= 8500 ? 0.54 : 0.48;
@@ -308,6 +437,8 @@
 
     var lot = getCalculatorValue("lot");
     var customsAssessment = getCalculatorValue("customsAssessment");
+    var make = getCalculatorText("make");
+    var model = getCalculatorText("model");
     var auctionType = getCalculatorText("auctionType");
     var auction = calculateAuctionFee(lot, auctionType, getCalculatorValue("auctionManual"));
     var inland = getCalculatorValue("inland");
@@ -325,7 +456,9 @@
     var fuel = getCalculatorText("fuel");
     var isElectric = fuel === "electric";
     var ageGroup = getVehicleAgeGroup(year);
-    var customsBaseUsd = Math.max(lot, customsAssessment);
+    var customsTableValue = getCustomsTableValue(make, model, year, engine, isElectric);
+    var tableAssessment = customsTableValue ? customsTableValue.value : 0;
+    var customsBaseUsd = Math.max(lot, customsAssessment, tableAssessment);
     var customsValueKzt = (customsBaseUsd + auction + inland + ocean) * usdRate;
     var customsValueEur = eurRate ? customsValueKzt / eurRate : 0;
     var lotKzt = lot * usdRate;
@@ -355,6 +488,8 @@
     var usdTarget = document.getElementById("calculator-total-usd");
     var kztTarget = document.getElementById("calculator-total-kzt");
     var auctionTarget = document.getElementById("auction-fee-usd");
+    var customsValueTarget = document.getElementById("customs-value-usd");
+    var customsNoteTarget = document.getElementById("customs-value-note");
 
     updateManualAuctionField(auctionType);
     setCalculatorRow("lot", lotKzt);
@@ -365,6 +500,38 @@
 
     if (auctionTarget) {
       auctionTarget.textContent = formatUsd(auction);
+    }
+
+    if (customsValueTarget) {
+      customsValueTarget.textContent = tableAssessment ? formatUsd(tableAssessment) : "$0";
+    }
+
+    if (customsNoteTarget) {
+      if (!make || !model) {
+        customsNoteTarget.textContent = "Выберите марку и модель — оценка таможни подтянется из таблицы.";
+      } else if (!customsTableValue) {
+        customsNoteTarget.textContent = "В таблице нет такой марки/модели. Калькулятор использует цену лота или ручную оценку.";
+      } else if (customsTableValue.yearDelta > 0) {
+        customsNoteTarget.textContent =
+          "Оценка по таблице: " +
+          customsTableValue.row.make +
+          " " +
+          customsTableValue.row.model +
+          ", база " +
+          customsTableValue.baseYear +
+          ", минус 15% за " +
+          customsTableValue.yearDelta +
+          " г.";
+      } else {
+        customsNoteTarget.textContent =
+          "Оценка по таблице: " +
+          customsTableValue.row.make +
+          " " +
+          customsTableValue.row.model +
+          ", " +
+          customsTableValue.row.year +
+          ".";
+      }
     }
 
     if (usdTarget) {
@@ -378,7 +545,14 @@
 
   if (calculator) {
     calculator.addEventListener("input", updateCalculator);
+    calculator.addEventListener("input", function (event) {
+      if (event.target && event.target.name === "make") updateCustomsModelOptions();
+    });
     calculator.classList.add("is-quick");
+    fillDatalist(customsMakes, customsValues.map(function (item) {
+      return item.make;
+    }));
+    updateCustomsModelOptions();
     document.querySelectorAll("[data-calc-mode]").forEach(function (button) {
       button.addEventListener("click", function () {
         var mode = button.getAttribute("data-calc-mode") || "quick";
