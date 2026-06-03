@@ -125,7 +125,7 @@
             <p class="glass-panel__eyebrow">Калькулятор</p>
             <h2 class="glass-panel__title">Предварительный расчёт авто из США</h2>
             <p class="glass-panel__lead">Введите цену лота, доставку и характеристики авто. Калькулятор посчитает ориентир с таможенной сеткой, утильсбором и первичной регистрацией в Казахстане.</p>
-            <p class="calculator-note">Расчёт справочный для легковых авто М1 и физлиц. Финальная сумма зависит от документов, курса валют, таможенной оценки и требований по конкретному автомобилю.</p>
+            <p class="calculator-note">Расчёт справочный для легковых авто М1 и физлиц. Если таможенная оценка по марке и модели выше цены покупки, укажите её отдельно — калькулятор возьмёт большую базу.</p>
           </article>
 
           <article class="glass-panel calculator" aria-label="Калькулятор стоимости авто из США">
@@ -133,6 +133,18 @@
               <label class="lead-form__field">
                 <span class="lead-form__label">Цена лота, $</span>
                 <input type="number" name="lot" min="0" step="100" value="12000" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Марка</span>
+                <input type="text" name="make" placeholder="Например: Toyota">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Модель</span>
+                <input type="text" name="model" placeholder="Например: Camry">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Оценка таможни, $</span>
+                <input type="number" name="customsAssessment" min="0" step="100" value="0" inputmode="decimal">
               </label>
               <label class="lead-form__field">
                 <span class="lead-form__label">Аукцион</span>
@@ -146,6 +158,10 @@
                 <span class="lead-form__label">Сбор вручную, $</span>
                 <input type="number" name="auctionManual" min="0" step="50" value="0" inputmode="decimal">
               </label>
+              <div class="calculator-auto-fee lead-form__field--full" aria-live="polite">
+                <span>Аукционный сбор подставится автоматически после цены лота:</span>
+                <strong id="auction-fee-usd">$0</strong>
+              </div>
               <label class="lead-form__field">
                 <span class="lead-form__label">Доставка по США, $</span>
                 <input type="number" name="inland" min="0" step="50" value="650" inputmode="decimal">
@@ -155,8 +171,8 @@
                 <input type="number" name="ocean" min="0" step="50" value="1800" inputmode="decimal">
               </label>
               <label class="lead-form__field">
-                <span class="lead-form__label">Ремонт, $</span>
-                <input type="number" name="repair" min="0" step="100" value="1500" inputmode="decimal">
+                <span class="lead-form__label">Ремонт, если нужен, $</span>
+                <input type="number" name="repair" min="0" step="100" value="0" inputmode="decimal">
               </label>
               <label class="lead-form__field">
                 <span class="lead-form__label">Документы в Грузии, $</span>
@@ -165,6 +181,10 @@
               <label class="lead-form__field">
                 <span class="lead-form__label">Доставка в Казахстан, $</span>
                 <input type="number" name="kazakhstanTransport" min="0" step="50" value="1200" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Оформление в РК, $</span>
+                <input type="number" name="kzDocs" min="0" step="50" value="600" inputmode="decimal">
               </label>
               <label class="lead-form__field">
                 <span class="lead-form__label">Год выпуска</span>
@@ -210,8 +230,7 @@
                 <div><span>Таможенный сбор</span><strong data-calc="customsFee">0 ₸</strong></div>
                 <div><span>Пошлина по сетке</span><strong data-calc="duty">0 ₸</strong></div>
                 <div><span>Утильсбор</span><strong data-calc="recycling">0 ₸</strong></div>
-                <div><span>Первичная регистрация</span><strong data-calc="primary">0 ₸</strong></div>
-                <div><span>СРТС и госномер</span><strong data-calc="plates">0 ₸</strong></div>
+                <div><span>Оформление в РК: СБКТС, ЭПТС, первичка, номера</span><strong data-calc="kzRegistration">0 ₸</strong></div>
               </div>
 
               <a href="#lead" class="btn btn--primary btn--block">Получить точный расчёт</a>

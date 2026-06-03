@@ -293,10 +293,20 @@
     }
   }
 
+  function updateManualAuctionField(type) {
+    if (!calculator) return;
+    var manualField = calculator.elements.auctionManual;
+    if (!manualField) return;
+
+    manualField.disabled = type !== "manual";
+    manualField.closest(".lead-form__field").classList.toggle("is-disabled", type !== "manual");
+  }
+
   function updateCalculator() {
     if (!calculator) return;
 
     var lot = getCalculatorValue("lot");
+    var customsAssessment = getCalculatorValue("customsAssessment");
     var auctionType = getCalculatorText("auctionType");
     var auction = calculateAuctionFee(lot, auctionType, getCalculatorValue("auctionManual"));
     var inland = getCalculatorValue("inland");
@@ -305,6 +315,7 @@
     var repair = getCalculatorValue("repair");
     var georgiaDocs = getCalculatorValue("georgiaDocs");
     var kazakhstanTransport = getCalculatorValue("kazakhstanTransport");
+    var kzDocs = getCalculatorValue("kzDocs");
     var usdRate = getCalculatorValue("usdRate");
     var eurRate = getCalculatorValue("eurRate");
     var year = Math.round(getCalculatorValue("year"));
@@ -312,17 +323,20 @@
     var fuel = getCalculatorText("fuel");
     var isElectric = fuel === "electric";
     var ageGroup = getVehicleAgeGroup(year);
-    var customsValueKzt = (lot + auction + inland + ocean) * usdRate;
+    var customsBaseUsd = Math.max(lot, customsAssessment);
+    var customsValueKzt = (customsBaseUsd + auction + inland + ocean) * usdRate;
     var baseKzt = (lot + inland + ocean + service) * usdRate;
     var auctionKzt = auction * usdRate;
     var repairKzt = repair * usdRate;
     var georgiaDocsKzt = georgiaDocs * usdRate;
     var kazakhstanTransportKzt = kazakhstanTransport * usdRate;
+    var kzDocsKzt = kzDocs * usdRate;
     var customsFee = 20000;
-    var duty = calculateCustomsDuty(customsValueKzt, lot, engine, ageGroup, eurRate, isElectric);
+    var duty = calculateCustomsDuty(customsValueKzt, customsBaseUsd, engine, ageGroup, eurRate, isElectric);
     var recycling = calculateRecyclingFee(engine, isElectric);
     var primary = calculatePrimaryRegistration(ageGroup, isElectric);
     var plates = 4.05 * 4325;
+    var kzRegistration = kzDocsKzt + primary + plates;
     var totalKzt =
       baseKzt +
       auctionKzt +
@@ -332,11 +346,12 @@
       customsFee +
       duty +
       recycling +
-      primary +
-      plates;
+      kzRegistration;
     var usdTarget = document.getElementById("calculator-total-usd");
     var kztTarget = document.getElementById("calculator-total-kzt");
+    var auctionTarget = document.getElementById("auction-fee-usd");
 
+    updateManualAuctionField(auctionType);
     setCalculatorRow("base", baseKzt);
     setCalculatorRow("auction", auctionKzt);
     setCalculatorRow("repair", repairKzt);
@@ -345,8 +360,11 @@
     setCalculatorRow("customsFee", customsFee);
     setCalculatorRow("duty", duty);
     setCalculatorRow("recycling", recycling);
-    setCalculatorRow("primary", primary);
-    setCalculatorRow("plates", plates);
+    setCalculatorRow("kzRegistration", kzRegistration);
+
+    if (auctionTarget) {
+      auctionTarget.textContent = formatUsd(auction);
+    }
 
     if (usdTarget) {
       usdTarget.textContent = usdRate ? formatUsd(totalKzt / usdRate) : "Укажите курс $";

@@ -472,6 +472,28 @@ button {
   background: linear-gradient(135deg, rgba(255, 106, 26, 0.16), rgba(255, 255, 255, 0.05));
 }
 
+.calculator-auto-fee {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.calculator-auto-fee span {
+  font-size: 0.84rem;
+  color: var(--color-muted);
+}
+
+.calculator-auto-fee strong {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  color: var(--color-orange-light);
+}
+
 .calculator-result__label,
 #calculator-total-usd {
   display: block;
@@ -541,6 +563,10 @@ button {
   min-width: 0;
 }
 
+.lead-form__field.is-disabled {
+  opacity: 0.55;
+}
+
 .lead-form__field--full {
   grid-column: 1 / -1;
 }
@@ -572,6 +598,10 @@ button {
 .lead-form__field textarea:focus {
   border-color: var(--color-orange);
   box-shadow: 0 0 0 3px rgba(255, 106, 26, 0.2);
+}
+
+.lead-form__field input:disabled {
+  cursor: not-allowed;
 }
 
 .lead-form__field select {
@@ -786,6 +816,12 @@ button {
 
   .calculator-result {
     padding: 1rem;
+  }
+
+  .calculator-auto-fee {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
   .calculator-breakdown div {
