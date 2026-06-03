@@ -1,7 +1,9 @@
 # Telegram bot for site leads
 
 This setup sends every site lead from Google Apps Script to a Telegram chat.
-The bot cannot message a client first by phone number. It sends the lead to a manager with buttons for WhatsApp, phone call, and site link.
+It also lets the same Telegram bot answer clients who open the bot first.
+
+The bot cannot message a client first by phone number. A client must open the bot and press `Start`, or submit a site form so the manager can reply in WhatsApp/call.
 
 ## 1. Create a Telegram bot
 
@@ -34,12 +36,37 @@ Option B: send leads to a group.
 4. Add Script Properties:
    - `TELEGRAM_BOT_TOKEN` = token from BotFather
    - `TELEGRAM_CHAT_ID` = manager or group chat id
+   - `WEB_APP_URL` = Apps Script Web App URL
 5. Deploy as Web App:
    - Execute as: `Me`
    - Who has access: `Anyone`
 6. Keep the web app URL in `script.js` as `WEBHOOK_URL`.
 
-## 4. Test
+## 4. Connect Telegram webhook
+
+After deployment:
+
+1. Copy the Web App URL.
+2. Save it in Script Properties as `WEB_APP_URL`.
+3. In Apps Script, select function `setupTelegramWebhook`.
+4. Press `Run`.
+5. Approve permissions.
+
+Telegram will now send bot messages to this Apps Script project.
+
+## 5. What the bot can answer
+
+When a client opens the bot and presses `Start`, the bot shows buttons:
+
+- `Рассчитать авто`
+- `Этапы сделки`
+- `Сроки доставки`
+- `Связаться с менеджером`
+- `Открыть сайт`
+
+If the client sends a phone number or shares contact, the bot forwards it to the manager chat.
+
+## 6. Test
 
 Submit the site form. Telegram should receive:
 
@@ -49,5 +76,7 @@ Submit the site form. Telegram should receive:
 - requested car
 - comment
 - buttons: WhatsApp, call, open site
+
+Then open the bot as a client and press `Start`.
 
 If Telegram is silent, check Apps Script `Executions` for errors.
