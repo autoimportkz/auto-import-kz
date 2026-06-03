@@ -401,7 +401,9 @@
         phone: String(data.get("phone") || "").trim(),
         budget: String(data.get("budget") || "").trim(),
         car: String(data.get("car") || "").trim(),
-        comment: String(data.get("comment") || "").trim()
+        comment: String(data.get("comment") || "").trim(),
+        pageUrl: window.location.href,
+        submittedAt: new Date().toISOString()
       };
 
       var submitBtn = leadForm.querySelector('button[type="submit"]');
