@@ -135,8 +135,16 @@
                 <input type="number" name="lot" min="0" step="100" value="12000" inputmode="decimal">
               </label>
               <label class="lead-form__field">
-                <span class="lead-form__label">Аукционный сбор, $</span>
-                <input type="number" name="auction" min="0" step="50" value="850" inputmode="decimal">
+                <span class="lead-form__label">Аукцион</span>
+                <select name="auctionType">
+                  <option value="copart">Copart</option>
+                  <option value="iaai">IAAI</option>
+                  <option value="manual">Ввести вручную</option>
+                </select>
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Сбор вручную, $</span>
+                <input type="number" name="auctionManual" min="0" step="50" value="0" inputmode="decimal">
               </label>
               <label class="lead-form__field">
                 <span class="lead-form__label">Доставка по США, $</span>
@@ -182,7 +190,8 @@
               </div>
 
               <div class="calculator-breakdown lead-form__field--full">
-                <div><span>Авто + доставка + услуги</span><strong data-calc="base">0 ₸</strong></div>
+                <div><span>Цена лота + доставка + услуги</span><strong data-calc="base">0 ₸</strong></div>
+                <div><span>Аукционный сбор</span><strong data-calc="auction">0 ₸</strong></div>
                 <div><span>Таможенный сбор</span><strong data-calc="customsFee">0 ₸</strong></div>
                 <div><span>Пошлина по сетке</span><strong data-calc="duty">0 ₸</strong></div>
                 <div><span>Утильсбор</span><strong data-calc="recycling">0 ₸</strong></div>

@@ -89,6 +89,134 @@
     }).format(value);
   }
 
+  function findTierFee(value, tiers) {
+    for (var i = 0; i < tiers.length; i += 1) {
+      if (value <= tiers[i].max) {
+        return tiers[i].rate ? value * tiers[i].rate : tiers[i].fee;
+      }
+    }
+
+    return 0;
+  }
+
+  function calculateCopartAuctionFee(lot) {
+    var buyerFee = findTierFee(lot, [
+      { max: 49.99, fee: 25 },
+      { max: 99.99, fee: 45 },
+      { max: 199.99, fee: 80 },
+      { max: 299.99, fee: 130 },
+      { max: 349.99, fee: 132.5 },
+      { max: 399.99, fee: 135 },
+      { max: 449.99, fee: 170 },
+      { max: 499.99, fee: 180 },
+      { max: 549.99, fee: 200 },
+      { max: 599.99, fee: 205 },
+      { max: 699.99, fee: 235 },
+      { max: 799.99, fee: 260 },
+      { max: 899.99, fee: 280 },
+      { max: 999.99, fee: 305 },
+      { max: 1199.99, fee: 355 },
+      { max: 1299.99, fee: 380 },
+      { max: 1399.99, fee: 400 },
+      { max: 1499.99, fee: 410 },
+      { max: 1599.99, fee: 430 },
+      { max: 1699.99, fee: 450 },
+      { max: 1799.99, fee: 465 },
+      { max: 1999.99, fee: 490 },
+      { max: 2399.99, fee: 525 },
+      { max: 2499.99, fee: 550 },
+      { max: 2999.99, fee: 575 },
+      { max: 3499.99, fee: 650 },
+      { max: 3999.99, fee: 700 },
+      { max: 4499.99, fee: 725 },
+      { max: 4999.99, fee: 750 },
+      { max: 5999.99, fee: 775 },
+      { max: 7499.99, fee: 800 },
+      { max: 7999.99, fee: 825 },
+      { max: 8499.99, fee: 850 },
+      { max: 8999.99, fee: 850 },
+      { max: 9999.99, fee: 850 },
+      { max: 10499.99, fee: 900 },
+      { max: 10999.99, fee: 900 },
+      { max: 11499.99, fee: 900 },
+      { max: 11999.99, fee: 900 },
+      { max: 12499.99, fee: 900 },
+      { max: 14999.99, fee: 900 },
+      { max: Infinity, rate: 0.075 }
+    ]);
+    var virtualBidFee = findTierFee(lot, [
+      { max: 99.99, fee: 0 },
+      { max: 499.99, fee: 49 },
+      { max: 999.99, fee: 59 },
+      { max: 1499.99, fee: 79 },
+      { max: 1999.99, fee: 89 },
+      { max: 3999.99, fee: 99 },
+      { max: 5999.99, fee: 109 },
+      { max: 7999.99, fee: 139 },
+      { max: Infinity, fee: 149 }
+    ]);
+
+    return buyerFee + virtualBidFee + 79 + 10;
+  }
+
+  function calculateIaaiAuctionFee(lot) {
+    var buyerFee = findTierFee(lot, [
+      { max: 99.99, fee: 1 },
+      { max: 199.99, fee: 40 },
+      { max: 299.99, fee: 60 },
+      { max: 349.99, fee: 75 },
+      { max: 399.99, fee: 90 },
+      { max: 499.99, fee: 100 },
+      { max: 599.99, fee: 130 },
+      { max: 699.99, fee: 145 },
+      { max: 799.99, fee: 160 },
+      { max: 899.99, fee: 175 },
+      { max: 999.99, fee: 190 },
+      { max: 1199.99, fee: 220 },
+      { max: 1299.99, fee: 230 },
+      { max: 1399.99, fee: 255 },
+      { max: 1499.99, fee: 270 },
+      { max: 1599.99, fee: 290 },
+      { max: 1699.99, fee: 305 },
+      { max: 1799.99, fee: 320 },
+      { max: 1999.99, fee: 340 },
+      { max: 2399.99, fee: 390 },
+      { max: 2499.99, fee: 410 },
+      { max: 2999.99, fee: 470 },
+      { max: 3499.99, fee: 510 },
+      { max: 3999.99, fee: 550 },
+      { max: 4499.99, fee: 600 },
+      { max: 4999.99, fee: 625 },
+      { max: 5999.99, fee: 650 },
+      { max: 7499.99, fee: 700 },
+      { max: 7999.99, fee: 725 },
+      { max: 8499.99, fee: 750 },
+      { max: 8999.99, fee: 775 },
+      { max: 9999.99, fee: 800 },
+      { max: 14999.99, fee: 850 },
+      { max: Infinity, rate: 0.075 }
+    ]);
+    var onlineFee = findTierFee(lot, [
+      { max: 99.99, fee: 0 },
+      { max: 499.99, fee: 50 },
+      { max: 999.99, fee: 65 },
+      { max: 1499.99, fee: 85 },
+      { max: 1999.99, fee: 95 },
+      { max: 3999.99, fee: 110 },
+      { max: 5999.99, fee: 125 },
+      { max: 7999.99, fee: 145 },
+      { max: Infinity, fee: 160 }
+    ]);
+
+    return buyerFee + onlineFee + 95 + 15;
+  }
+
+  function calculateAuctionFee(lot, type, manualFee) {
+    if (type === "manual") return manualFee;
+    if (type === "iaai") return calculateIaaiAuctionFee(lot);
+    return calculateCopartAuctionFee(lot);
+  }
+
   function getVehicleAgeGroup(year) {
     if (year >= 2025) return "under2";
     if (year === 2024) return "twoToThree";
@@ -169,7 +297,8 @@
     if (!calculator) return;
 
     var lot = getCalculatorValue("lot");
-    var auction = getCalculatorValue("auction");
+    var auctionType = getCalculatorText("auctionType");
+    var auction = calculateAuctionFee(lot, auctionType, getCalculatorValue("auctionManual"));
     var inland = getCalculatorValue("inland");
     var ocean = getCalculatorValue("ocean");
     var service = getCalculatorValue("service");
@@ -181,17 +310,19 @@
     var isElectric = fuel === "electric";
     var ageGroup = getVehicleAgeGroup(year);
     var customsValueKzt = (lot + auction + inland + ocean) * usdRate;
-    var baseKzt = (lot + auction + inland + ocean + service) * usdRate;
+    var baseKzt = (lot + inland + ocean + service) * usdRate;
+    var auctionKzt = auction * usdRate;
     var customsFee = 20000;
     var duty = calculateCustomsDuty(customsValueKzt, lot, engine, ageGroup, eurRate, isElectric);
     var recycling = calculateRecyclingFee(engine, isElectric);
     var primary = calculatePrimaryRegistration(ageGroup, isElectric);
     var plates = 4.05 * 4325;
-    var totalKzt = baseKzt + customsFee + duty + recycling + primary + plates;
+    var totalKzt = baseKzt + auctionKzt + customsFee + duty + recycling + primary + plates;
     var usdTarget = document.getElementById("calculator-total-usd");
     var kztTarget = document.getElementById("calculator-total-kzt");
 
     setCalculatorRow("base", baseKzt);
+    setCalculatorRow("auction", auctionKzt);
     setCalculatorRow("customsFee", customsFee);
     setCalculatorRow("duty", duty);
     setCalculatorRow("recycling", recycling);
