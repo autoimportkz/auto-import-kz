@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<title>Авто из США под ключ | Auto Import KZ</title>
-
-<meta name="description" content="Подбор, покупка и доставка автомобилей из США под ключ. Copart, IAAI, Manheim. Проверка истории, помощь с доставкой и оформлением." />  
+  <title>Авто из США под ключ | Auto Import KZ</title>
+  <meta name="description" content="Подбор, покупка и доставка автомобилей из США под ключ. Copart, IAAI, Manheim. Проверка истории, помощь с доставкой и оформлением.">
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDMMG1D7F8"></script>
   <script>
@@ -15,8 +14,10 @@
   </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Auto-import-KZ — подбор и доставка авто из США в Казахстан">
-  <title>Auto-import-KZ | Авто из США</title>
+  <meta name="theme-color" content="#060608">
+  <meta property="og:title" content="Auto-import-KZ | Авто из США под ключ">
+  <meta property="og:description" content="Подбор, покупка и доставка автомобилей из США в Казахстан.">
+  <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
@@ -33,6 +34,7 @@
     <a href="#hero" class="site-header__logo">Auto-import<span>KZ</span></a>
     <nav class="site-header__nav" aria-label="Навигация">
       <a href="#features">Услуги</a>
+      <a href="#calculator">Калькулятор</a>
       <a href="#usa">Авто из США</a>
       <a href="#lead">Заявка</a>
       <a href="#contacts">Контакты</a>
@@ -48,6 +50,7 @@
   <aside class="site-nav-mobile" id="site-nav-mobile" aria-hidden="true">
     <nav aria-label="Мобильное меню">
       <a href="#features">Услуги</a>
+      <a href="#calculator">Калькулятор</a>
       <a href="#usa">Авто из США</a>
       <a href="#lead">Заявка</a>
       <a href="#contacts">Контакты</a>
@@ -62,7 +65,7 @@
         <p class="hero__subtitle">Подбор и доставка авто из США</p>
         <div class="hero__actions">
           <a href="#lead" class="btn btn--primary">Оставить заявку</a>
-          <a href="#features" class="btn btn--secondary">Узнать больше</a>
+          <a href="#calculator" class="btn btn--secondary">Рассчитать стоимость</a>
         </div>
       </div>
     </section>
@@ -98,6 +101,60 @@
             </div>
             <h3 class="glass-card__heading">Поддержка 24/7</h3>
             <p class="glass-card__text">Менеджер на связи на каждом этапе сделки.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block block--calculator" id="calculator">
+      <div class="wrap">
+        <div class="calculator-layout">
+          <article class="glass-panel calculator-copy">
+            <p class="glass-panel__eyebrow">Калькулятор</p>
+            <h2 class="glass-panel__title">Предварительный расчёт авто из США</h2>
+            <p class="glass-panel__lead">Введите цену лота и расходы по доставке. Итог поможет быстро понять ориентир бюджета до консультации с менеджером.</p>
+            <p class="calculator-note">Расчёт справочный: финальная стоимость зависит от аукциона, штата, порта, курса валют, таможенных платежей и состояния автомобиля.</p>
+          </article>
+
+          <article class="glass-panel calculator" aria-label="Калькулятор стоимости авто из США">
+            <form class="calculator-form" id="cost-calculator">
+              <label class="lead-form__field">
+                <span class="lead-form__label">Цена лота, $</span>
+                <input type="number" name="lot" min="0" step="100" value="12000" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Аукционный сбор, $</span>
+                <input type="number" name="auction" min="0" step="50" value="850" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Доставка по США, $</span>
+                <input type="number" name="inland" min="0" step="50" value="650" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Морская доставка, $</span>
+                <input type="number" name="ocean" min="0" step="50" value="1800" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Услуги компании, $</span>
+                <input type="number" name="service" min="0" step="50" value="1000" inputmode="decimal">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Таможня и оформление, $</span>
+                <input type="number" name="customs" min="0" step="100" value="3000" inputmode="decimal">
+              </label>
+              <label class="lead-form__field lead-form__field--full">
+                <span class="lead-form__label">Курс $ к ₸</span>
+                <input type="number" name="rate" min="1" step="1" value="470" inputmode="decimal">
+              </label>
+
+              <div class="calculator-result lead-form__field--full" aria-live="polite">
+                <span class="calculator-result__label">Ориентировочная стоимость</span>
+                <strong id="calculator-total-usd">$0</strong>
+                <span id="calculator-total-kzt">0 ₸</span>
+              </div>
+
+              <a href="#lead" class="btn btn--primary btn--block">Получить точный расчёт</a>
+            </form>
           </article>
         </div>
       </div>

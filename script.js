@@ -5,6 +5,7 @@
   var burger = document.querySelector(".site-header__burger");
   var mobileNav = document.getElementById("site-nav-mobile");
   var leadForm = document.getElementById("lead-form");
+  var calculator = document.getElementById("cost-calculator");
 
   function updateHeader() {
     if (!header) return;
@@ -58,6 +59,57 @@
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
+
+  function getCalculatorValue(name) {
+    if (!calculator) return 0;
+    var field = calculator.elements[name];
+    var value = field ? Number(field.value) : 0;
+    return Number.isFinite(value) && value > 0 ? value : 0;
+  }
+
+  function formatUsd(value) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0
+    }).format(value);
+  }
+
+  function formatKzt(value) {
+    return new Intl.NumberFormat("ru-KZ", {
+      style: "currency",
+      currency: "KZT",
+      maximumFractionDigits: 0
+    }).format(value);
+  }
+
+  function updateCalculator() {
+    if (!calculator) return;
+
+    var total =
+      getCalculatorValue("lot") +
+      getCalculatorValue("auction") +
+      getCalculatorValue("inland") +
+      getCalculatorValue("ocean") +
+      getCalculatorValue("service") +
+      getCalculatorValue("customs");
+    var rate = getCalculatorValue("rate");
+    var usdTarget = document.getElementById("calculator-total-usd");
+    var kztTarget = document.getElementById("calculator-total-kzt");
+
+    if (usdTarget) {
+      usdTarget.textContent = formatUsd(total);
+    }
+
+    if (kztTarget) {
+      kztTarget.textContent = rate ? formatKzt(total * rate) : "Укажите курс";
+    }
+  }
+
+  if (calculator) {
+    calculator.addEventListener("input", updateCalculator);
+    updateCalculator();
+  }
 
   var WEBHOOK_URL =
     "https://script.google.com/macros/s/AKfycbwkDxNCLCagHmeVBINmFkhO6sWy-2W83dd1bPbyK8872k0qkkN0CNBF8aSh42X4q8rUEg/exec";
