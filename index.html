@@ -112,8 +112,8 @@
           <article class="glass-panel calculator-copy">
             <p class="glass-panel__eyebrow">Калькулятор</p>
             <h2 class="glass-panel__title">Предварительный расчёт авто из США</h2>
-            <p class="glass-panel__lead">Введите цену лота и расходы по доставке. Итог поможет быстро понять ориентир бюджета до консультации с менеджером.</p>
-            <p class="calculator-note">Расчёт справочный: финальная стоимость зависит от аукциона, штата, порта, курса валют, таможенных платежей и состояния автомобиля.</p>
+            <p class="glass-panel__lead">Введите цену лота, доставку и характеристики авто. Калькулятор посчитает ориентир с таможенной сеткой, утильсбором и первичной регистрацией в Казахстане.</p>
+            <p class="calculator-note">Расчёт справочный для легковых авто М1 и физлиц. Финальная сумма зависит от документов, курса валют, таможенной оценки и требований по конкретному автомобилю.</p>
           </article>
 
           <article class="glass-panel calculator" aria-label="Калькулятор стоимости авто из США">
@@ -135,22 +135,47 @@
                 <input type="number" name="ocean" min="0" step="50" value="1800" inputmode="decimal">
               </label>
               <label class="lead-form__field">
+                <span class="lead-form__label">Год выпуска</span>
+                <input type="number" name="year" min="1990" max="2026" step="1" value="2021" inputmode="numeric">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Объём двигателя, см³</span>
+                <input type="number" name="engine" min="0" step="100" value="2000" inputmode="numeric">
+              </label>
+              <label class="lead-form__field">
+                <span class="lead-form__label">Тип двигателя</span>
+                <select name="fuel">
+                  <option value="gas">Бензин / дизель</option>
+                  <option value="hybrid">Гибрид</option>
+                  <option value="electric">Электро</option>
+                </select>
+              </label>
+              <label class="lead-form__field">
                 <span class="lead-form__label">Услуги компании, $</span>
                 <input type="number" name="service" min="0" step="50" value="1000" inputmode="decimal">
               </label>
-              <label class="lead-form__field">
-                <span class="lead-form__label">Таможня и оформление, $</span>
-                <input type="number" name="customs" min="0" step="100" value="3000" inputmode="decimal">
-              </label>
               <label class="lead-form__field lead-form__field--full">
                 <span class="lead-form__label">Курс $ к ₸</span>
-                <input type="number" name="rate" min="1" step="1" value="470" inputmode="decimal">
+                <input type="number" name="usdRate" min="1" step="1" value="485" inputmode="decimal">
+              </label>
+              <label class="lead-form__field lead-form__field--full">
+                <span class="lead-form__label">Курс € к ₸ для таможенной сетки</span>
+                <input type="number" name="eurRate" min="1" step="1" value="525" inputmode="decimal">
               </label>
 
               <div class="calculator-result lead-form__field--full" aria-live="polite">
-                <span class="calculator-result__label">Ориентировочная стоимость</span>
-                <strong id="calculator-total-usd">$0</strong>
-                <span id="calculator-total-kzt">0 ₸</span>
+                <span class="calculator-result__label">Итоговая ориентировочная стоимость</span>
+                <strong id="calculator-total-kzt">0 ₸</strong>
+                <span id="calculator-total-usd">$0</span>
+              </div>
+
+              <div class="calculator-breakdown lead-form__field--full">
+                <div><span>Авто + доставка + услуги</span><strong data-calc="base">0 ₸</strong></div>
+                <div><span>Таможенный сбор</span><strong data-calc="customsFee">0 ₸</strong></div>
+                <div><span>Пошлина по сетке</span><strong data-calc="duty">0 ₸</strong></div>
+                <div><span>Утильсбор</span><strong data-calc="recycling">0 ₸</strong></div>
+                <div><span>Первичная регистрация</span><strong data-calc="primary">0 ₸</strong></div>
+                <div><span>СРТС и госномер</span><strong data-calc="plates">0 ₸</strong></div>
               </div>
 
               <a href="#lead" class="btn btn--primary btn--block">Получить точный расчёт</a>

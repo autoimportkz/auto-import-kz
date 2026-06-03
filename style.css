@@ -473,19 +473,52 @@ button {
 }
 
 .calculator-result__label,
-#calculator-total-kzt {
+#calculator-total-usd {
   display: block;
   font-size: 0.82rem;
   color: var(--color-muted);
 }
 
-#calculator-total-usd {
+#calculator-total-kzt {
   display: block;
   margin: 0.15rem 0;
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 5vw, 2.55rem);
   line-height: 1.05;
   color: #fff;
+}
+
+.calculator-breakdown {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.25rem 0 0.15rem;
+}
+
+.calculator-breakdown div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.calculator-breakdown div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.calculator-breakdown span {
+  font-size: 0.86rem;
+  color: var(--color-muted);
+}
+
+.calculator-breakdown strong {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: right;
 }
 
 /* ===== Lead form ===== */
@@ -521,6 +554,7 @@ button {
 }
 
 .lead-form__field input,
+.lead-form__field select,
 .lead-form__field textarea {
   width: 100%;
   padding: 0.85rem 1rem;
@@ -534,9 +568,25 @@ button {
 }
 
 .lead-form__field input:focus,
+.lead-form__field select:focus,
 .lead-form__field textarea:focus {
   border-color: var(--color-orange);
   box-shadow: 0 0 0 3px rgba(255, 106, 26, 0.2);
+}
+
+.lead-form__field select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-muted) 50%),
+    linear-gradient(135deg, var(--color-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%;
+  background-size:
+    6px 6px,
+    6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 2.35rem;
 }
 
 .lead-form__field input::placeholder,
@@ -738,11 +788,22 @@ button {
     padding: 1rem;
   }
 
+  .calculator-breakdown div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .calculator-breakdown strong {
+    text-align: left;
+  }
+
   .lead-form {
     grid-template-columns: 1fr;
   }
 
   .lead-form__field input,
+  .lead-form__field select,
   .lead-form__field textarea {
     font-size: 16px;
   }
