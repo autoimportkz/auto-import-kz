@@ -384,7 +384,7 @@
   }
 
   var WEBHOOK_URL =
-    "https://script.google.com/macros/s/AKfycbwkDxNCLCagHmeVBINmFkhO6sWy-2W83dd1bPbyK8872k0qkkN0CNBF8aSh42X4q8rUEg/exec";
+    "https://script.google.com/macros/s/AKfycbws0Y9SAD9tpcSVSii3vkAbXD0N9Iaq9S1naTYBMQsyu0QJsnwx1-P1jbb6YqeT7VVa1Q/exec";
 
   if (leadForm) {
     leadForm.addEventListener("submit", function (event) {
