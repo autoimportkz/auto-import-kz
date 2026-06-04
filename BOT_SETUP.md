@@ -80,3 +80,31 @@ Submit the site form. Telegram should receive:
 Then open the bot as a client and press `Start`.
 
 If Telegram is silent, check Apps Script `Executions` for errors.
+
+## 7. Separate consultant bot
+
+Use `apps-script/telegram-consult-bot.gs` for `@autoimportkz_consult_bot`.
+
+This bot is for client conversation, not raw site notifications. Flow:
+
+1. Accepts the request.
+2. Asks budget under key in Kazakhstan.
+3. Asks delivery city.
+4. Asks whether damaged cars are acceptable.
+5. Shows the `Получить подбор` button.
+6. Sends the completed request to `MANAGER_CHAT_ID`.
+
+Setup:
+
+1. Create or open a separate Apps Script project.
+2. Paste `apps-script/telegram-consult-bot.gs`.
+3. Replace `PASTE_CONSULT_BOT_TOKEN_HERE` with the token from BotFather.
+4. Check `MANAGER_CHAT_ID`.
+5. Deploy as Web App:
+   - Execute as: `Me`
+   - Who has access: `Anyone`
+6. Copy the Web App `/exec` URL.
+7. Paste it into `setupTelegramWebhook()` as `webAppUrl`.
+8. Run `setupTelegramWebhook`.
+
+Keep the existing leads bot for site forms, and use the consultant bot link for client chat.

@@ -6,8 +6,8 @@
   --color-orange: #ff6a1a;
   --color-orange-light: #ff8a47;
   --color-orange-glow: rgba(255, 106, 26, 0.45);
-  --glass-bg: rgba(14, 14, 18, 0.58);
-  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-bg: rgba(12, 12, 16, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.12);
   --glass-inset: rgba(255, 255, 255, 0.05);
   --font-display: "Syne", system-ui, sans-serif;
   --font-body: "DM Sans", system-ui, sans-serif;
@@ -437,13 +437,13 @@ button {
 
 /* ===== Calculator ===== */
 .block--calculator .wrap {
-  max-width: 1280px;
+  max-width: 1440px;
 }
 
 .calculator-layout {
   display: grid;
-  grid-template-columns: minmax(280px, 0.7fr) minmax(520px, 1.3fr);
-  gap: 1.25rem;
+  grid-template-columns: minmax(270px, 0.58fr) minmax(760px, 1.42fr);
+  gap: 1.5rem;
   align-items: start;
 }
 
@@ -490,12 +490,13 @@ button {
 
 .calculator {
   display: grid;
-  gap: 1rem;
+  gap: 1.15rem;
+  padding: clamp(1.35rem, 2.2vw, 2.15rem);
 }
 
 .calculator-tabs {
   display: inline-flex;
-  width: fit-content;
+  width: min(100%, 420px);
   padding: 0.25rem;
   border: 1px solid var(--glass-border);
   border-radius: 12px;
@@ -503,6 +504,7 @@ button {
 }
 
 .calculator-tab {
+  flex: 1;
   padding: 0.62rem 0.95rem;
   border-radius: 9px;
   font-size: 0.9rem;
@@ -518,15 +520,17 @@ button {
 
 .calculator-form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem 1.1rem;
 }
 
 .calculator-result {
-  padding: clamp(1.25rem, 3vw, 1.75rem);
+  padding: clamp(1.45rem, 3vw, 2rem);
   border: 1px solid rgba(255, 106, 26, 0.24);
-  border-radius: 16px;
-  background: linear-gradient(135deg, rgba(255, 106, 26, 0.16), rgba(255, 255, 255, 0.05));
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 106, 26, 0.2), rgba(255, 255, 255, 0.06)),
+    rgba(0, 0, 0, 0.24);
 }
 
 .calculator-auto-fee {
@@ -560,48 +564,57 @@ button {
 
 #calculator-total-kzt {
   display: block;
-  margin: 0.15rem 0;
+  margin: 0.2rem 0 0.1rem;
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 3.35rem);
+  font-size: clamp(2.65rem, 4.8vw, 4.35rem);
   line-height: 1.05;
   color: #fff;
 }
 
 .calculator-breakdown {
   display: grid;
-  gap: 0.7rem;
-  padding: 0.35rem 0 0.15rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+  padding: 0.2rem 0 0.15rem;
 }
 
 .calculator-breakdown div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  display: grid;
+  align-content: space-between;
+  gap: 0.4rem;
+  min-height: 92px;
+  padding: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.045);
 }
 
 .calculator-breakdown div:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.9rem;
 }
 
 .calculator-breakdown span {
-  font-size: 0.95rem;
+  font-size: 0.82rem;
+  line-height: 1.3;
   color: var(--color-muted);
 }
 
 .calculator-breakdown strong {
-  flex-shrink: 0;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-text);
-  text-align: right;
+  text-align: left;
 }
 
 .calculator-form.is-quick [data-detail-field] {
   display: none;
+}
+
+.calculator-form.is-quick .calculator-customs-value,
+.calculator-form.is-quick .calculator-breakdown,
+.calculator-form.is-quick .btn--block {
+  grid-column: 1 / -1;
 }
 
 .finder-panel {
@@ -794,6 +807,22 @@ button {
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .calculator-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .calculator-breakdown {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .calculator-breakdown div:last-child {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 768px) {
@@ -891,6 +920,7 @@ button {
 
   .calculator-layout,
   .calculator-form,
+  .calculator-breakdown,
   .finder-panel,
   .finder-form {
     grid-template-columns: 1fr;
@@ -915,9 +945,11 @@ button {
   }
 
   .calculator-breakdown div {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.2rem;
+    min-height: auto;
+  }
+
+  .calculator-breakdown div:last-child {
+    grid-column: auto;
   }
 
   .calculator-breakdown strong {
