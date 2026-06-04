@@ -613,8 +613,27 @@ button {
 
 .calculator-form.is-quick .calculator-customs-value,
 .calculator-form.is-quick .calculator-breakdown,
+.calculator-form.is-quick .calculator-contact,
 .calculator-form.is-quick .btn--block {
   grid-column: 1 / -1;
+}
+
+.calculator-contact {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.75fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: end;
+  padding: 1rem;
+  border: 1px solid rgba(255, 106, 26, 0.2);
+  border-radius: 14px;
+  background: rgba(255, 106, 26, 0.08);
+}
+
+.calculator-contact p {
+  align-self: center;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: var(--color-muted);
 }
 
 .finder-panel {
@@ -921,6 +940,7 @@ button {
   .calculator-layout,
   .calculator-form,
   .calculator-breakdown,
+  .calculator-contact,
   .finder-panel,
   .finder-form {
     grid-template-columns: 1fr;

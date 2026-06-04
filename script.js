@@ -555,11 +555,20 @@
     });
     calculator.addEventListener("submit", function (event) {
       event.preventDefault();
+
+      if (!calculator.checkValidity()) {
+        calculator.reportValidity();
+        return;
+      }
+
       updateCalculator();
 
+      var data = new FormData(calculator);
       var totalKzt = document.getElementById("calculator-total-kzt");
       var totalUsd = document.getElementById("calculator-total-usd");
       var customsNote = document.getElementById("customs-value-note");
+      var calcName = String(data.get("calcName") || "").trim();
+      var calcPhone = String(data.get("calcPhone") || "").trim();
       var make = getCalculatorText("make") || "Марка не указана";
       var model = getCalculatorText("model") || "Модель не указана";
       var year = getCalculatorText("year") || "Год не указан";
@@ -581,8 +590,8 @@
       ].filter(Boolean).join("\n");
 
       sendLeadPayload(calculator, {
-        name: "Расчёт из калькулятора",
-        phone: "Не указан",
+        name: calcName || "Расчёт из калькулятора",
+        phone: calcPhone,
         budget: totalKzt ? totalKzt.textContent : "Не рассчитан",
         car: [make, model, year, engine + " см³", fuel].filter(Boolean).join(", "),
         comment: comment,
