@@ -1,6 +1,15 @@
 const BOT_TOKEN = "PASTE_CONSULT_BOT_TOKEN_HERE";
 const MANAGER_CHAT_ID = "45283323";
 const SITE_URL = "https://movixstudio-kz.github.io/auto-import-kz/";
+const WEB_APP_URL = "PASTE_WEB_APP_EXEC_URL_HERE";
+
+function doGet() {
+  return out({
+    ok: true,
+    bot: "autoimportkz_consult_bot",
+    message: "Consult bot webhook is alive. Telegram updates must be sent by doPost."
+  });
+}
 
 function doPost(e) {
   try {
@@ -19,8 +28,6 @@ function handleMessage(msg) {
   const chatId = msg.chat.id;
   const text = clean(msg.text);
   const state = getState(chatId);
-
-  if (String(chatId) === String(MANAGER_CHAT_ID)) return out({ ok: true });
 
   if (text === "/start" || text === "/menu") {
     clearState(chatId);
@@ -67,8 +74,6 @@ function handleCallback(query) {
   answer(query.id);
 
   const chatId = query.message.chat.id;
-  if (String(chatId) === String(MANAGER_CHAT_ID)) return out({ ok: true });
-
   const state = getState(chatId);
 
   if (query.data === "restart") {
@@ -191,13 +196,12 @@ function clearState(chatId) {
 }
 
 function setupTelegramWebhook() {
-  const webAppUrl = "PASTE_WEB_APP_EXEC_URL_HERE";
   const response = UrlFetchApp.fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/setWebhook", {
     method: "post",
     contentType: "application/json",
     muteHttpExceptions: true,
     payload: JSON.stringify({
-      url: webAppUrl,
+      url: WEB_APP_URL,
       allowed_updates: ["message", "callback_query"],
       drop_pending_updates: true
     })

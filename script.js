@@ -423,6 +423,11 @@
     }
   }
 
+  function getCalculatorRowText(name) {
+    var target = document.querySelector('[data-calc="' + name + '"]');
+    return target ? target.textContent : "0 ₸";
+  }
+
   function updateManualAuctionField(type) {
     if (!calculator) return;
     var manualField = calculator.elements.auctionManual;
@@ -548,6 +553,43 @@
     calculator.addEventListener("input", function (event) {
       if (event.target && event.target.name === "make") updateCustomsModelOptions();
     });
+    calculator.addEventListener("submit", function (event) {
+      event.preventDefault();
+      updateCalculator();
+
+      var totalKzt = document.getElementById("calculator-total-kzt");
+      var totalUsd = document.getElementById("calculator-total-usd");
+      var customsNote = document.getElementById("customs-value-note");
+      var make = getCalculatorText("make") || "Марка не указана";
+      var model = getCalculatorText("model") || "Модель не указана";
+      var year = getCalculatorText("year") || "Год не указан";
+      var engine = getCalculatorText("engine") || "Объём не указан";
+      var fuel = getCalculatorText("fuel") || "Тип двигателя не указан";
+      var comment = [
+        "Клиент отправил расчёт из калькулятора без повторного заполнения формы.",
+        "",
+        "Итог: " + (totalKzt ? totalKzt.textContent : "Не рассчитан"),
+        "Ориентир в $: " + (totalUsd ? totalUsd.textContent : "Не рассчитан"),
+        "",
+        "Цена лота: " + getCalculatorRowText("lot"),
+        "Доставка и услуги: " + getCalculatorRowText("delivery"),
+        "Таможня: " + getCalculatorRowText("customs"),
+        "Утильсбор: " + getCalculatorRowText("recycling"),
+        "Первичная регистрация и оформление: " + getCalculatorRowText("kzRegistration"),
+        "",
+        customsNote ? customsNote.textContent : ""
+      ].filter(Boolean).join("\n");
+
+      sendLeadPayload(calculator, {
+        name: "Расчёт из калькулятора",
+        phone: "Не указан",
+        budget: totalKzt ? totalKzt.textContent : "Не рассчитан",
+        car: [make, model, year, engine + " см³", fuel].filter(Boolean).join(", "),
+        comment: comment,
+        pageUrl: window.location.href + "#calculator",
+        submittedAt: new Date().toISOString()
+      }, "Расчёт отправлен менеджеру. Чтобы он смог связаться с вами, напишите в Telegram или оставьте телефон в форме ниже.", false);
+    });
     calculator.classList.add("is-quick");
     fillDatalist(customsMakes, customsValues.map(function (item) {
       return item.make;
@@ -568,7 +610,7 @@
   var WEBHOOK_URL =
     "https://script.google.com/macros/s/AKfycbws0Y9SAD9tpcSVSii3vkAbXD0N9IaqgS1naTYBMQsyu0QJsnwxl-P1jbb6YqeT7VValQ/exec";
 
-  function sendLeadPayload(form, payload, successMessage) {
+  function sendLeadPayload(form, payload, successMessage, shouldReset) {
     var submitBtn = form.querySelector('button[type="submit"]');
 
     if (submitBtn) {
@@ -582,7 +624,9 @@
     })
       .then(function () {
         alert(successMessage);
-        form.reset();
+        if (shouldReset !== false) {
+          form.reset();
+        }
         if (form === calculator) updateCalculator();
       })
       .catch(function () {
