@@ -588,7 +588,9 @@
         comment: comment,
         pageUrl: window.location.href + "#calculator",
         submittedAt: new Date().toISOString()
-      }, "Расчёт отправлен менеджеру. Чтобы он смог связаться с вами, напишите в Telegram или оставьте телефон в форме ниже.", false);
+      }, "Расчёт отправлен менеджеру. Чтобы он смог связаться с вами, напишите в Telegram или оставьте телефон в форме ниже.", false, "calculator_lead_submit", {
+        calculator_total_kzt: totalKzt ? totalKzt.textContent.replace(/\D/g, "") : ""
+      });
     });
     calculator.classList.add("is-quick");
     fillDatalist(customsMakes, customsValues.map(function (item) {
@@ -610,7 +612,16 @@
   var WEBHOOK_URL =
     "https://script.google.com/macros/s/AKfycbws0Y9SAD9tpcSVSii3vkAbXD0N9IaqgS1naTYBMQsyu0QJsnwxl-P1jbb6YqeT7VValQ/exec";
 
-  function sendLeadPayload(form, payload, successMessage, shouldReset) {
+  function trackConversion(eventName, params) {
+    if (typeof window.gtag !== "function") return;
+
+    window.gtag("event", eventName, Object.assign({
+      event_category: "lead",
+      page_location: window.location.href
+    }, params || {}));
+  }
+
+  function sendLeadPayload(form, payload, successMessage, shouldReset, eventName, eventParams) {
     var submitBtn = form.querySelector('button[type="submit"]');
 
     if (submitBtn) {
@@ -623,6 +634,10 @@
       body: JSON.stringify(payload)
     })
       .then(function () {
+        trackConversion(eventName || "lead_submit", Object.assign({
+          form_id: form.id || "unknown",
+          lead_type: payload.name || "lead"
+        }, eventParams || {}));
         alert(successMessage);
         if (shouldReset !== false) {
           form.reset();
@@ -658,7 +673,7 @@
         comment: String(data.get("comment") || "").trim(),
         pageUrl: window.location.href,
         submittedAt: new Date().toISOString()
-      }, "Заявка отправлена! Мы скоро свяжемся с вами.");
+      }, "Заявка отправлена! Мы скоро свяжемся с вами.", true, "site_lead_submit");
     });
   }
 
@@ -684,7 +699,10 @@
         comment: "Клиент нажал «Найти авто под мой бюджет». Нужно подобрать варианты и закрыть на консультацию.",
         pageUrl: window.location.href + "#finder",
         submittedAt: new Date().toISOString()
-      }, "Заявка на подбор отправлена! Мы скоро свяжемся с вами.");
+      }, "Заявка на подбор отправлена! Мы скоро свяжемся с вами.", true, "budget_finder_submit", {
+        budget_kzt: budget.replace(/\D/g, ""),
+        body_type: bodyType || "not_set"
+      });
     });
   }
 })();
